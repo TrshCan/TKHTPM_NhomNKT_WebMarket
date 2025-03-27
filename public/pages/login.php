@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 <body>
 
-<?php include "../../header.php" ?>
+<?php include "../include/header.php" ?>
     <main class="container">
         <div class="row justify-content-center">
             <div class="col-md-5">
@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </main>
 
-<?php include "../../footer.php" ?>
+<?php include "../include/footer.php" ?>
 </body>
 </html>
 

@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 <body>
 
-<?php require_once "../../header.php" ?>
+<?php require_once "../include/header.php" ?>
 
     <main class="register-page">
         <h1 style="margin-top: 60px;">Đăng Ký</h1>
@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </form>
     </main>
 
-<?php include "../../footer.php" ?>
+<?php include "../include/footer.php" ?>
 </body>
 </html>
 

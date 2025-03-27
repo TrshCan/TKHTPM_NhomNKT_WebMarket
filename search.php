@@ -10,7 +10,7 @@
 </head>
 <body>
 <?php
-include "header.php";
+include "./public/include/header.php";
 $conn = new mysqli("localhost", "root", "", "webbanhang");
 
 if ($conn->connect_error) {
@@ -51,7 +51,7 @@ if ($result->num_rows > 0) {
 
 $stmt->close();
 $conn->close();
-include "footer.php";
+include "./public/include/footer.php";
 ?>
 </body>
 </html>

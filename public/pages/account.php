@@ -1,19 +1,7 @@
 <?php
-include "../include/db.php";
+require_once "../include/User_Database.php";
+$userDb = new User_Database();
 
-function getUserInfo($email) {
-    global $conn;
-    
-    $query = "SELECT * FROM users WHERE email = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    
-    return $result->fetch_assoc();
-}
-?>
-<?php
 session_start();
 
 if (!isset($_SESSION['email'])) {
@@ -21,14 +9,15 @@ if (!isset($_SESSION['email'])) {
     exit();
 }
 
-$user = getUserInfo($_SESSION['email']);
+$user = $userDb->getUserInfo($_SESSION['email']);
 
 if (!$user) {
-    echo "<p>Lỗi: Không thể lấy thông tin tài khoản.</p>";
+    error_log("Lỗi: Không thể lấy thông tin tài khoản của " . $_SESSION['email']);
+    echo "<p class='text-danger text-center'>Lỗi: Không thể lấy thông tin tài khoản.</p>";
     exit();
 }
 
-include "../..//header.php";
+include "../include/header.php";
 ?>
 
 <main class="account-page">
@@ -40,22 +29,20 @@ include "../..//header.php";
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Thông Tin Cá Nhân</h5>
-                        <p class="card-text">Tên: <?php echo htmlspecialchars($user['name']); ?></p>
-                        <p class="card-text">Email: <?php echo htmlspecialchars($user['email']); ?></p>
-                        <p class="card-text">Số điện thoại: <?php echo htmlspecialchars($user['phone']); ?></p>
-                        <p class="card-text">Địa Chỉ: <?php echo htmlspecialchars($user['address']); ?></p>
+                        <p class="card-text"><strong>Tên:</strong> <?= htmlentities($user['name']) ?></p>
+                        <p class="card-text"><strong>Email:</strong> <?= htmlentities($user['email']) ?></p>
+                        <p class="card-text"><strong>Số điện thoại:</strong> <?= htmlentities($user['phone']) ?></p>
+                        <p class="card-text"><strong>Địa chỉ:</strong> <?= htmlentities($user['address']) ?></p>
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-body d-grid gap-2">
                         <h5 class="card-title">Thao Tác</h5>
-                        <p class="card-text">
-                            <button class="btn btn-primary" onclick="window.location.href='../pages/orders.php'">Lịch Sử Đơn Hàng</button>
-                            <button class="btn btn-secondary" onclick="window.location.href='../pages/settings.php'">Cài Đặt</button>
-                            <button class="btn btn-danger logout" onclick="window.location.href='../pages/logout.php'">Đăng Xuất</button>
-                        </p>
+                        <a href="../pages/orders.php" class="btn btn-primary">Lịch Sử Đơn Hàng</a>
+                        <a href="../pages/settings.php" class="btn btn-secondary">Cài Đặt</a>
+                        <a href="../pages/logout.php" class="btn btn-danger">Đăng Xuất</a>
                     </div>
                 </div>
             </div>
@@ -63,5 +50,4 @@ include "../..//header.php";
     </div>
 </main>
 
-<?php include "../../footer.php"; ?>
-
+<?php include "../include/footer.php"; ?>

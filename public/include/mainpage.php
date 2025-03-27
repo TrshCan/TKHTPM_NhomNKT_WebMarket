@@ -1,7 +1,7 @@
 <?php
-require_once "public/include/db.php";
-include "Products.php";
-$products = (new ProductModel())->getProducts();
+require_once "Product_Database.php";
+
+$products = (new Product_Database())->getAllProducts();
 ?>
 
 <!-- Banner -->
