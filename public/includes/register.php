@@ -1,30 +1,25 @@
 <?php
-session_start(); // Bắt đầu phiên làm việc
+session_start();
 
-// Kiểm tra nếu người dùng đã đăng nhập
-if (isset($_SESSION['username'])) {
-    header("Location: index.php"); // Chuyển hướng đến trang chủ
-    exit();
-}
-
-// Xử lý form đăng nhập
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];
+    $email = $_POST['email'];
     $password = $_POST['password'];
 
-    // Giả sử đây là dữ liệu người dùng đã đăng kí (thay thế bằng truy vấn cơ sở dữ liệu trong thực tế)
+    // Giả sử đây là nơi xử lý đăng ký người dùng (thay thế bằng truy vấn cơ sở dữ liệu trong thực tế)
     $user_data = [
         'username' => 'sampleUser',
-        'password' => 'samplePass' // Lưu ý: trong thực tế nên dùng hash mật khẩu
+        'email' => 'sample@example.com',
+        'password' => password_hash('samplePass', PASSWORD_DEFAULT) // Nên dùng hash mật khẩu
     ];
 
-    // Kiểm tra thông tin đăng nhập
-    if ($username == $user_data['username'] && $password == $user_data['password']) {
+    // Kiểm tra nếu tên đăng nhập hoặc email đã tồn tại
+    if ($username == $user_data['username'] || $email == $user_data['email']) {
+        $error = "Tên đăng nhập hoặc email đã tồn tại!";
+    } else {
         $_SESSION['username'] = $username;
         header("Location: index.php");
         exit();
-    } else {
-        $error = "Tên đăng nhập hoặc mật khẩu không đúng!";
     }
 }
 ?>
@@ -34,23 +29,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng Nhập</title>
+    <title>Đăng Ký</title>
     <link rel="stylesheet" href="public/css/style.css">
 </head>
 <body>
 
 <?php include "header.php" ?>
-    <main class="login-page">
-        <h1>Đăng Nhập</h1>
+
+    <main class="register-page">
+        <h1>Đăng Ký</h1>
         <?php if (!empty($error)): ?>
             <p style="color:red;"><?php echo $error; ?></p>
         <?php endif; ?>
         <form method="POST">
             <input type="text" name="username" placeholder="Tên đăng nhập" required>
+            <input type="text" name="email" placeholder="Email" required>
             <input type="password" name="password" placeholder="Mật khẩu" required>
-            <button type="submit">Đăng Nhập</button>
+            <button type="submit">Đăng Ký</button>
         </form>
-        <p>Chưa có tài khoản? <a href="register.php">Đăng ký</a></p>
+        <p>Đã có tài khoản? <a href="login.php">Đăng Nhập</a></p>
     </main>
 
 <?php include "footer.php" ?>
