@@ -30,35 +30,43 @@ class Product_Database extends Database
     //     $this->category_id = $category_id;
     // }
 
-    public function getProductId() {
+    public function getProductId()
+    {
         return $this->product_id;
     }
 
-    public function getCategoryId() {
+    public function getCategoryId()
+    {
         return $this->category_id;
     }
 
-    public function getName() {
+    public function getName()
+    {
         return $this->name;
     }
 
-    public function getDescription() {
+    public function getDescription()
+    {
         return $this->description;
     }
 
-    public function getImage() {
+    public function getImage()
+    {
         return $this->image;
     }
 
-    public function getPrice() {
+    public function getPrice()
+    {
         return $this->price;
     }
 
-    public function getStock() {
+    public function getStock()
+    {
         return $this->stock;
     }
 
-    public function getStatus() {
+    public function getStatus()
+    {
         return $this->status;
     }
 
@@ -73,11 +81,23 @@ class Product_Database extends Database
 
     public function getProductById($id)
     {
-        $sql = self::$connection->prepare("SELECT * FROM products WHERE product_id = ?");
-        $sql->bind_param("i", $id);
+
+
+        $sql = self::$connection->prepare('SELECT * FROM products where product_id=? ');
+        $sql->bind_param('i', $id);
         $sql->execute();
-        $item = array();
-        $item = $sql->get_result()->fetch_assoc();
-        return $item;
+
+        $items = $sql->get_result()->fetch_all(MYSQLI_ASSOC);
+        return $items;
+    }
+    // Trong file Product_Database.php
+    public function getRelatedProducts($product_id): array
+    {
+        // Giả sử lấy 4 sản phẩm khác với product_id hiện tại
+        $sql = self::$connection->prepare("SELECT * FROM products WHERE product_id = ? LIMIT 4");
+        $sql->bind_param("i", $product_id);
+        $sql->execute();
+        $items = $sql->get_result()->fetch_all(MYSQLI_ASSOC);
+        return $items;
     }
 }
