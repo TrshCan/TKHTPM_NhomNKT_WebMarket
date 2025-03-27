@@ -71,13 +71,43 @@ class Product_Database extends Database
         return $item;
     }
 
-    public function getProductById($id)
+    public function getProductById($product_id)
     {
         $sql = self::$connection->prepare("SELECT * FROM products WHERE product_id = ?");
-        $sql->bind_param("i", $id);
+        $sql->bind_param("i", $product_id);
         $sql->execute();
-        $item = array();
-        $item = $sql->get_result()->fetch_assoc();
-        return $item;
+        $result = $sql->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+    
+    
+    public function searchProducts($keyword)
+    {
+        $sql = self::$connection->prepare("SELECT * FROM products WHERE name LIKE ? OR description LIKE ?");
+        if (!$sql) {
+            die("Lỗi truy vấn: " . self::$connection->error);
+        }
+    
+        $keyword = '%' . $keyword . '%';
+        $sql->bind_param("ss", $keyword, $keyword);
+        $sql->execute();
+        
+        $result = $sql->get_result();
+        $items = $result->fetch_all(MYSQLI_ASSOC);
+    
+        $sql->close(); // Đóng truy vấn để tránh rò rỉ bộ nhớ
+        return $items;
+    }
+    
+    public function getRelatedProducts($product_id)
+    {
+        $sql = self::$connection->prepare("SELECT * FROM products WHERE category_id = (SELECT category_id FROM products WHERE product_id = ?) AND product_id != ? LIMIT 4");
+        $sql->bind_param("ii", $product_id, $product_id);
+        $sql->execute();
+        $result = $sql->get_result();
+        $items = $result->fetch_all(MYSQLI_ASSOC);
+        $sql->close();
+        return $items;
     }
 }
+

@@ -10,7 +10,7 @@
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
     <!-- Bootstrap icons-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
@@ -19,46 +19,7 @@
 </head>
 
 <body>
-    <!-- Header -->
-    <header>
-        <div class="logo">N<span>K</span>T</div>
-        <nav class="navbar navbar-expand-lg">
-            <div class="container">
-                <a class="navbar-brand fw-bold" href="index.php" style="font-family: 'Arial', sans-serif;">Trang Chủ</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link fw-bold" href="cart.html" style="font-family: 'Arial', sans-serif;">Giỏ
-                                Hàng</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle fw-bold" href="#" id="accountDropdown" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false"
-                                style="font-family: 'Arial', sans-serif;">
-                                Tài Khoản
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="accountDropdown">
-                                <li><a class="dropdown-item" href="login.php"
-                                        style="font-family: 'Arial', sans-serif;">Đăng Nhập</a></li>
-                                <li><a class="dropdown-item" href="register.php"
-                                        style="font-family: 'Arial', sans-serif;">Đăng Ký</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-        <div class="search-box">
-            <form action="search.php" method="get">
-                <input type="text" id="search-input" name="query" placeholder="Tìm kiếm sản phẩm...">
-                <button type="submit">🔍</button>
-            </form>
-        </div>
-    </header>
+    <?php include "../includes/header.php"; ?>
 
     <?php
     require_once "../includes/Product_Database.php";
@@ -136,15 +97,10 @@
         </div>
     </section>
 
-    <!-- Footer-->
-    <footer>
-        <div class="container">
-            <p class="m-0 text-center text-white">Copyright © NKT 2025</p>
-        </div>
-    </footer>
+   <?php include "../includes/footer.php" ?>
 
     <!-- Bootstrap core JS-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
     </script>
     <!-- Core theme JS-->

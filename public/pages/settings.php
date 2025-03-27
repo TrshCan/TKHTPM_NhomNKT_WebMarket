@@ -6,7 +6,7 @@ if (!isset($_SESSION['email'])) {
     exit();
 }
 
-include "../include/header.php";
+include "../includes/header.php";
 
 $error = '';
 
@@ -105,5 +105,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     })();
 </script>
 
-<?php include "../include/footer.php"; ?>
+<?php include "../includes/footer.php"; ?>
 

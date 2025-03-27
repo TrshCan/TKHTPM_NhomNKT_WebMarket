@@ -1,5 +1,5 @@
 <?php
-require_once "../include/User_Database.php";
+require_once "../includes/User_Database.php";
 $userDb = new User_Database();
 
 session_start();
@@ -17,7 +17,7 @@ if (!$user) {
     exit();
 }
 
-include "../include/header.php";
+include "../includes/header.php";
 ?>
 
 <main class="account-page">
@@ -50,4 +50,4 @@ include "../include/header.php";
     </div>
 </main>
 
-<?php include "../include/footer.php"; ?>
+<?php include "../includes/footer.php"; ?>

@@ -4,12 +4,6 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Kiểm tra nếu người dùng đã đăng nhập
-if (isset($_SESSION['email'])) {
-    header("Location: ../../index.php"); // Chuyển hướng đến trang chủ
-    exit();
-}
-
 
 // Xử lý form đăng nhập
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -51,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 <body>
 
-<?php include "../include/header.php" ?>
+<?php include '../includes/header.php'; ?>
     <main class="container">
         <div class="row justify-content-center">
             <div class="col-md-5">
@@ -77,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </main>
 
-<?php include "../include/footer.php" ?>
+<?php include '../includes/footer.php'; ?>
 </body>
 </html>
 
