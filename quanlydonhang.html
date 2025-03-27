@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Đơn Hàng</title>
+    <link rel="stylesheet" href="public/css/style.css">
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <h2>Admin Panel</h2>
+        <ul>
+            <li><a href="admin.html">Dashboard</a></li>
+            <li><a href="quanlysp.html">Quản lý sản phẩm</a></li>
+            <li><a href="quanlydonhang.html" class="active">Quản lý đơn hàng</a></li>
+            <li><a href="users.html">Quản lý người dùng</a></li>
+            <li><a href="../index.html">Thoát</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="admin-content">
+        <h1>Quản Lý Đơn Hàng</h1>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>ID Đơn Hàng</th>
+                    <th>Khách Hàng</th>
+                    <th>Sản Phẩm</th>
+                    <th>Tổng Tiền</th>
+                    <th>Trạng Thái</th>
+                    <th>Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>#1001</td>
+                    <td>Nguyễn Văn A</td>
+                    <td>Áo Thun Nam</td>
+                    <td>250,000đ</td>
+                    <td><span class="status pending">Đang xử lý</span></td>
+                    <td class="action-buttons">
+                        <button class="edit">Cập Nhật</button>
+                        <button class="delete">Xóa</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>#1002</td>
+                    <td>Trần Thị B</td>
+                    <td>Giày Sneaker</td>
+                    <td>900,000đ</td>
+                    <td><span class="status completed">Hoàn Thành</span></td>
+                    <td class="action-buttons">
+                        <button class="edit">Cập Nhật</button>
+                        <button class="delete">Xóa</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>#1003</td>
+                    <td>Phạm Văn C</td>
+                    <td>Laptop Acer</td>
+                    <td>15,000,000đ</td>
+                    <td><span class="status cancelled">Đã Hủy</span></td>
+                    <td class="action-buttons">
+                        <button class="edit">Cập Nhật</button>
+                        <button class="delete">Xóa</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>
