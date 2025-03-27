@@ -32,7 +32,7 @@ if (isset($_GET['id']) || isset($_GET['action'])) {
             }
         }
         // Redirect to cart page after adding
-        header("Location: ../pages/index.php");
+        header("Location: ../../index.php");
         exit;
 
     } elseif ($_GET['action'] == 'delete') {
@@ -55,7 +55,7 @@ if (isset($_GET['id']) || isset($_GET['action'])) {
     }
 } else {
     // If no valid action or ID is provided, redirect to index
-    header("Location: ../pages/index.php");
+    header("Location: ../../index.php");
     exit;
 }
 ?>

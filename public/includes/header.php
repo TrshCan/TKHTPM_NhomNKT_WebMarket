@@ -17,7 +17,7 @@
         <div class="logo">N<span>K</span>T</div>
         <nav class="navbar navbar-expand-lg">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="index.php" style="font-family: 'Arial', sans-serif;">Trang Chủ</a>
+        <a class="navbar-brand fw-bold" href="../../index.php" style="font-family: 'Arial', sans-serif;">Trang Chủ</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -27,7 +27,7 @@
                     <!-- <a class="nav-link text-white fw-bold" href="products.html" style="font-family: 'Arial', sans-serif;">Sản Phẩm</a> -->
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white fw-bold" href="cart.php" style="font-family: 'Arial', sans-serif;">Giỏ Hàng</a>
+                    <a class="nav-link text-white fw-bold" href="public/pages/cart.php" style="font-family: 'Arial', sans-serif;">Giỏ Hàng</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle text-white fw-bold" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown" style="font-family: 'Arial', sans-serif;">

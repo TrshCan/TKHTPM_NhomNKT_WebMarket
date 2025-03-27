@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     unset($_SESSION['cart']);
 
     // Redirect
-    header("Location: ../pages/index.php");
+    header("Location: ../../index.php");
     exit;
 }
 ?>
