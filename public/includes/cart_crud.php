@@ -13,15 +13,15 @@ if (isset($_GET['id']) || isset($_GET['action'])) {
     $productModel = new Product_Database();
 
     if ($_GET['action'] == 'add') {
-        $product_id = (int)$_GET['id']; // Cast to int for security
-        $quantity = isset($_GET['quantity']) ? (int)$_GET['quantity'] : 1; // Default to 1 if not provided
+        $product_id = $_GET['id'];
+        $quantity = isset($_GET['quantity']) ? $_GET['quantity'] : 1; // Default to 1 if not provided
 
         if (isset($_SESSION['cart'][$product_id])) {
             // If product exists in cart, increment quantity
             $_SESSION['cart'][$product_id]['quantity'] += $quantity;
         } else {
             // Fetch product details and add new item to cart
-            $product = $productModel->getProductById($product_id);
+            $product = $productModel->getProductById2($product_id);
             if ($product) {
                 $_SESSION['cart'][$product_id] = [
                     'name' => $product['name'],

@@ -16,6 +16,13 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <!-- Custom CSS -->
     <link rel="stylesheet" href="../assets/css/items.css">
+
+    <style>
+        .product-section .container .d-flex .btn-add-to-cart a {
+            color: #333;
+            text-decoration: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -29,47 +36,46 @@
         $products = $productsdb->getProductById($product_id);
         foreach ($products as $value) {
     ?>
-    <!-- Product section-->
-    <section class="product-section">
-        <div class="container px-4 px-lg-5 my-5">
-            <div class="row gx-4 gx-lg-5 align-items-center">
-                <div class="col-md-6"><img src="../assets/images/<?= $value["image"] ?>" alt="<?= $value["name"] ?>" />
+            <!-- Product section-->
+            <section class="product-section">
+                <div class="container px-4 px-lg-5 my-5">
+                    <div class="row gx-4 gx-lg-5 align-items-center">
+                        <div class="col-md-6"><img src="../assets/images/<?= $value["image"] ?>" alt="<?= $value["name"] ?>" />
+                        </div>
+                        <div class="col-md-6">
+                            <div class="small mb-1">Mã: <?= $value["product_id"] ?></div>
+                            <h1 class="display-5 fw-bolder"><?= $value["name"] ?></h1>
+                            <div class="fs-5 mb-3">
+                                <span><?= number_format($value["price"], 0, ',', '.') ?>đ</span>
+                            </div>
+                            <p class="lead"><?= $value["description"] ?></p>
+                            <div class="mb-3">
+                                <label class="form-label">Kích Thước:</label>
+                                <button class="size-option">S</button>
+                                <button class="size-option">M</button>
+                                <button class="size-option">L</button>
+                                <button class="size-option">XL</button>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Màu Sắc:</label>
+                                <span class="color-option" style="background-color: white;"></span>
+                                <span class="color-option" style="background-color: black;"></span>
+                                <span class="color-option" style="background-color: gray;"></span>
+                            </div>
+                            <div class="d-flex">
+                                <input class="form-control text-center me-3" id="inputQuantity" type="number" value="1"
+                                    style="max-width: 3rem" />
+                                <button class="btn-add-to-cart flex-shrink-0">
+                                    <a href="../includes/cart_crud.php?action=add&id=<?php echo $value['product_id']; ?>&quantity=1">Thêm vào giỏ</a>
+                                </button>
+                                <button class="btn-buy-now flex-shrink-0" type="button">
+                                    Mua Ngay
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="small mb-1">Mã: <?= $value["product_id"] ?></div>
-                    <h1 class="display-5 fw-bolder"><?= $value["name"] ?></h1>
-                    <div class="fs-5 mb-3">
-                        <span><?= number_format($value["price"], 0, ',', '.') ?>đ</span>
-                    </div>
-                    <p class="lead"><?= $value["description"] ?></p>
-                    <div class="mb-3">
-                        <label class="form-label">Kích Thước:</label>
-                        <button class="size-option">S</button>
-                        <button class="size-option">M</button>
-                        <button class="size-option">L</button>
-                        <button class="size-option">XL</button>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Màu Sắc:</label>
-                        <span class="color-option" style="background-color: white;"></span>
-                        <span class="color-option" style="background-color: black;"></span>
-                        <span class="color-option" style="background-color: gray;"></span>
-                    </div>
-                    <div class="d-flex">
-                        <input class="form-control text-center me-3" id="inputQuantity" type="number" value="1"
-                            style="max-width: 3rem" />
-                        <button class="btn-add-to-cart flex-shrink-0" type="button">
-                            <i class="bi-cart-fill me-1"></i>
-                            Thêm Vào Giỏ
-                        </button>
-                        <button class="btn-buy-now flex-shrink-0" type="button">
-                            Mua Ngay
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+            </section>
     <?php
         }
     }
@@ -84,12 +90,12 @@
                 $related_products = $productsdb->getRelatedProducts($product_id);
                 foreach ($related_products as $related) {
                 ?>
-                <div class="product">
-                    <img src="../assets/images/<?= $related["image"] ?>" alt="<?= $related["name"] ?>" />
-                    <h3><?= $related["name"] ?></h3>
-                    <p class="price"><?= number_format($related["price"], 0, ',', '.') ?>đ</p>
-                    <button class="add-to-cart">Thêm Vào Giỏ</button>
-                </div>
+                    <div class="product">
+                        <img src="../assets/images/<?= $related["image"] ?>" alt="<?= $related["name"] ?>" />
+                        <h3><?= $related["name"] ?></h3>
+                        <p class="price"><?= number_format($related["price"], 0, ',', '.') ?>đ</p>
+                        <button class="add-to-cart">Thêm Vào Giỏ</button>
+                    </div>
                 <?php
                 }
                 ?>
@@ -97,7 +103,7 @@
         </div>
     </section>
 
-   <?php include "../includes/footer.php" ?>
+    <?php include "../includes/footer.php" ?>
 
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"

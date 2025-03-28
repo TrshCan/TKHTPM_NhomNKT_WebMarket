@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Form data
-    $user_id = isset($_SESSION['user_id']) ? (int)$_SESSION['user_id'] : null;
+    $user_id = isset($_POST['id']) ? (int)$_POST['id'] : null;
     $payment_method = $_POST['payment'];
     $address = implode(', ', [$_POST['address'], $_POST['ward'], $_POST['district'], $_POST['province']]);
 

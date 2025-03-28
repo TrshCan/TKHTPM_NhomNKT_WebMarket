@@ -25,8 +25,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Lưu email và tên vào session
             $_SESSION['email'] = $email;
             $_SESSION['name'] = $user['name']; 
+            if($user['role']=='admin'){
+                header("Location:admin.php");
+            }else{
 
-            header("Location: ../../index.php");
+                header("Location: ../../index.php");
+            }
             exit();
         }
     }

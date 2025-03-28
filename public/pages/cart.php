@@ -1,12 +1,15 @@
 <?php
 session_start();
 include '../includes/header.php';
+include '../includes/Product_Database.php';
 
+$products = new Product_Database();
 // Calculate total if cart exists
 $total = 0;
 if (!empty($_SESSION['cart'])) {
-    foreach ($_SESSION['cart'] as $item) {
-        $total += $item['price'] * $item['quantity'];
+    foreach ($_SESSION['cart'] as $id=>$items) {
+        $item = $products->getProductById2($id);
+        $total += $item['price'] * $items['quantity'];
     }
 }
 ?>
@@ -16,7 +19,7 @@ if (!empty($_SESSION['cart'])) {
     <h1 class="text-center mb-4">Giỏ Hàng</h1>
     <?php if (empty($_SESSION['cart'])): ?>
         <div class="alert alert-info text-center" role="alert">
-            Giỏ hàng của bạn đang trống. <a href="index.php" class="alert-link">Tiếp tục mua sắm!</a>
+            Giỏ hàng của bạn đang trống. <a href="<?= $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST']; ?>/TKHTPM_NhomNKT_WebMarket.git/index.php" class="alert-link">Tiếp tục mua sắm!</a>
         </div>
     <?php else: ?>
         <div class="table-responsive">
@@ -32,17 +35,18 @@ if (!empty($_SESSION['cart'])) {
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($_SESSION['cart'] as $id => $item): ?>
+                    <?php foreach ($_SESSION['cart'] as $id=>$items): 
+                        $item = $products->getProductById2($id)?>
                         <tr>
                             <td>
-                                <img src="../assets/images/<?php echo htmlspecialchars($item['image']); ?>" alt="Product Image" class="img-thumbnail" style="width: 80px; height: 80px;">
+                                <img src="../assets/images/<?php echo $item['image']; ?>" alt="Product Image" class="img-thumbnail" style="width: 80px; height: 80px;">
                             </td>
-                            <td><?php echo htmlspecialchars($item['name']); ?></td>
-                            <td><?php echo number_format($item['price'], 0) . 'đ'; ?></td>
+                            <td><?php echo $item['name']; ?></td>
+                            <td><?php echo $item['price'] . 'đ'; ?></td>
                             <td>
-                                <input type="number" class="form-control w-25 mx-auto" value="<?php echo $item['quantity']; ?>" min="1" readonly>
+                                <input type="number" class="form-control w-25 mx-auto" value="<?php echo $items['quantity']; ?>" min="1" readonly>
                             </td>
-                            <td><?php echo number_format($item['price'] * $item['quantity'], 0) . 'đ'; ?></td>
+                            <td><?php echo $item['price'] * $items['quantity'] . 'đ'; ?></td>
                             <td>
                                 <a href="#" onclick="confirmDelete('<?php echo $id; ?>')" class="btn btn-danger btn-sm">Xóa</a>
                             </td>
@@ -71,6 +75,7 @@ if (!empty($_SESSION['cart'])) {
 </footer>
 
 <script src="../bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     function confirmDelete(id) {
         if (confirm("Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng không?")) {
@@ -84,5 +89,6 @@ if (!empty($_SESSION['cart'])) {
         }
     }
 </script>
+
 </body>
 </html>

@@ -1,6 +1,10 @@
 <?php
 session_start();
-include '../includes/header.php'
+include '../includes/header.php';
+include '../includes/User_Database.php';
+$userDB = new User_Database();
+$email = $_SESSION['email'];
+$user = $userDB->getUserInfo2($email)
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -41,6 +45,7 @@ include '../includes/header.php'
                         <h4 class="mb-4">Thông Tin Giao Hàng</h4>
                         <form method="POST" action="../includes/process_checkout.php" id="checkout-form">
                             <div class="row g-3">
+                                <input type="text" class="form-control" id="id" name="id" value="<?= $user['user_id']?>" hidden>
                                 <div class="col-md-6">
                                     <label for="firstName" class="form-label">Họ</label>
                                     <input type="text" class="form-control" id="firstName" name="first_name" required>
@@ -114,10 +119,10 @@ include '../includes/header.php'
                         <?php foreach ($_SESSION['cart'] as $item): ?>
                             <div class="summary-item d-flex justify-content-between align-items-center">
                                 <div class="summary-item-content">
-                                    <img src="../assets/images/<?php echo htmlspecialchars($item['image']); ?>" alt="<?php echo htmlspecialchars($item['name']); ?>" class="product-img">
-                                    <span><?php echo htmlspecialchars($item['name']); ?></span>
+                                    <img src="../assets/images/<?php echo $item['image']; ?>" alt="<?php echo $item['name']; ?>" class="product-img">
+                                    <span><?php echo $item['name']; ?></span>
                                 </div>
-                                <span class="summary-item-price"><?php echo number_format($item['price'] * $item['quantity'], 0) . 'đ'; ?></span>
+                                <span class="summary-item-price"><?php echo $item['price'] * $item['quantity'] . 'đ'; ?></span>
                             </div>
                         <?php endforeach; ?>
                         <div class="coupon-section">
@@ -127,7 +132,7 @@ include '../includes/header.php'
                         <hr>
                         <div class="summary-item d-flex justify-content-between">
                             <span>Tạm Tính</span>
-                            <span id="subtotal"><?php echo number_format($subtotal, 0) . 'đ'; ?></span>
+                            <span id="subtotal"><?php echo $subtotal . 'đ'; ?></span>
                         </div>
                         <div class="summary-item d-flex justify-content-between">
                             <span>Giảm Giá Mã Coupon</span>
@@ -136,7 +141,7 @@ include '../includes/header.php'
                         </div>
                         <div class="summary-item d-flex justify-content-between fw-bold">
                             <span>Tổng Cộng</span>
-                            <span id="total"><?php echo number_format($total, 0) . 'đ'; ?></span>
+                            <span id="total"><?php echo $total . 'đ'; ?></span>
                             <input type="hidden" id="total-amount" name="total" value="<?php echo $total; ?>">
                         </div>
                         <button type="submit" class="btn btn-custom btn-lg w-100 mt-4">Đặt Hàng</button>

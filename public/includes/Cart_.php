@@ -1,6 +1,6 @@
 <?php
 session_start(); // Ensure session is started
-require_once 'ProductModel.php';
+require_once 'Product_Database.php';
 
 class Cart {
     private $items = [];

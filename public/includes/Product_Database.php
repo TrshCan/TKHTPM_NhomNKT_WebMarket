@@ -79,6 +79,15 @@ class Product_Database extends Database
         $result = $sql->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
     }
+
+    public function getProductById2($product_id)
+    {
+        $sql = self::$connection->prepare("SELECT * FROM products WHERE product_id = ?");
+        $sql->bind_param("i", $product_id);
+        $sql->execute();
+        $result = $sql->get_result();
+        return $result->fetch_assoc();
+    }
     
     
     public function searchProducts($keyword)
@@ -109,5 +118,40 @@ class Product_Database extends Database
         $sql->close();
         return $items;
     }
+    public function delateProduct($id)
+    {
+        $sql = self::$connection->prepare("DELETE FROM products WHERE product_id=?");
+        $sql->bind_param("i", $id);
+        $result = $sql->execute();
+
+        return $result;
+    }
+    public function addProduct($category_id, $name, $description, $image, $price, $stock, $status) {
+        $sql = self::$connection->prepare("INSERT INTO products (category_id, name, description, image, price, stock, status) VALUES (?,?,?,?,?,?,?)");
+        $sql->bind_param("isssiis", $category_id, $name, $description, $image, $price, $stock, $status);
+        $result = $sql->execute();
+        return $result;
+    }
+    
+
+    // Update function for a product
+    public function UpdateProduct($id, $name, $price, $desc, $image, $category_id)
+    {
+        // Prepare the SQL statement to update the product based on the ID
+        $sql = self::$connection->prepare("UPDATE products SET name=?, price=?, `desc`=?, image=?, category_id=? WHERE id=?");
+
+        // Bind parameters: s for string, i for integer, d for double
+        $sql->bind_param("sissii", $name, $price, $desc, $image, $category_id, $id);
+
+        // Execute the statement
+        $result = $sql->execute();
+
+        // Close the prepared statement
+        $sql->close();
+
+        // Return the result of the execution
+        return $result;
+    }
+
 }
 

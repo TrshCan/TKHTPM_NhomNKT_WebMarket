@@ -1,4 +1,5 @@
 <?php
+include "../includes/header.php"; 
 $searchTerm = isset($_GET['query']) ? trim($_GET['query']) : '';
 $products = [];
 include '../includes/Product_Database.php';
@@ -17,9 +18,123 @@ if (!empty($searchTerm)) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <link rel="stylesheet" href="./public/assets/css/style.css">
+    <style>
+         .products .container .card .card-body a{
+            color: #333;
+            text-decoration: none;
+        }
+        .products .container .card .card-footer .text-center .add-to-cart a{
+            color: #333;
+            text-decoration: none;
+        }
+           /* Định dạng thẻ a trong sản phẩm */
+           .product-name {
+            text-decoration: none;
+            /* Bỏ gạch chân */
+            font-size: 1.5rem;
+            /* Cỡ chữ to hơn (24px) */
+            font-family: 'Roboto', sans-serif;
+            /* Font chữ đẹp */
+            color: #333;
+            /* Màu chữ xám đậm */
+            font-weight: 500;
+            /* Độ đậm vừa phải */
+        }
+
+        .product-name:hover {
+            color: #007bff;
+            /* Màu xanh dương khi hover */
+        }
+
+        /* Optional: Định dạng giá sản phẩm */
+        .price {
+            font-size: 1.2rem;
+            /* Cỡ chữ giá */
+            color: #e74c3c;
+            /* Màu đỏ nổi bật */
+            font-weight: bold;
+        }
+
+        /* Định dạng thẻ a trong sản phẩm */
+        .product-name {
+            text-decoration: none;
+            /* Bỏ gạch chân */
+            font-size: 1.5rem;
+            /* Cỡ chữ to hơn (24px) */
+            font-family: 'Roboto', sans-serif;
+            /* Font chữ đẹp */
+            color: #333;
+            /* Màu chữ xám đậm */
+            font-weight: 500;
+            /* Độ đậm vừa phải */
+        }
+
+        .product-name:hover {
+            color: #007bff;
+            /* Màu xanh dương khi hover */
+        }
+
+        /* Định dạng giá sản phẩm */
+        .price {
+            font-size: 1.2rem;
+            /* Cỡ chữ giá */
+            color: #e74c3c;
+            /* Màu đỏ nổi bật */
+            font-weight: bold;
+        }
+
+        /* Cân bằng chiều cao sản phẩm */
+        .card {
+            height: 100%;
+            /* Đảm bảo thẻ card chiếm toàn bộ chiều cao của cột */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            /* Căn chỉnh nội dung bên trong */
+        }
+
+        /* Cố định chiều cao hình ảnh */
+        .card-img-top {
+            height: 400px;
+            /* Chiều cao cố định cho hình ảnh */
+            object-fit: cover;
+            /* Đảm bảo hình ảnh không bị méo */
+            width: 100%;
+            /* Chiều rộng đầy đủ */
+        }
+
+        /* Đảm bảo phần nội dung bên dưới đồng đều */
+        .card-body {
+            flex-grow: 1;
+            /* Phần nội dung mở rộng để lấp đầy không gian */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            /* Căn giữa nội dung */
+        }
+
+        /* Đảm bảo phần nút ở dưới cùng */
+        .card-footer {
+            margin-top: auto;
+            /* Đẩy nút xuống dưới cùng */
+        }
+
+        /* Định dạng nút "View options" và "Thêm vào giỏ" */
+        .btn-outline-dark {
+            width: 100%;
+            /* Nút chiếm toàn bộ chiều rộng */
+            margin-bottom: 5px;
+            /* Khoảng cách giữa các nút */
+        }
+
+        .products .card .card-footer .add-to-cart a {
+            color: #333;
+            text-decoration: none;
+        }
+    </style>
 </head>
+
 <body>
-    <?php include "../includes/header.php"; ?>
     
     <section class="products py-5">
         <div class="container">
@@ -35,6 +150,7 @@ if (!empty($searchTerm)) {
                                         <a href="../pages/items.php?product_id=<?= $product['product_id'] ?>" class="product-name">
                                             <?= htmlspecialchars($product['name']) ?>
                                         </a>
+                                        <p class="lead"><?= $product["description"] ?></p>
                                         <p class="price"><?= number_format($product['price'], 0, ',', '.') ?>đ</p>
                                     </div>
                                 </div>

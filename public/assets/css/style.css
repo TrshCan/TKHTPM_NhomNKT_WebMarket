@@ -722,3 +722,55 @@ table th, table td {
     background: #dc3545;
     color: white;
 }
+/* Định dạng nút "View options" và "Thêm vào giỏ" */
+.btn-outline-dark {
+    width: 100%;
+    /* Nút chiếm toàn bộ chiều rộng */
+    margin-bottom: 5px;
+    /* Khoảng cách giữa các nút */
+     
+}
+
+/* Hiệu ứng hover cho nút "Thêm vào giỏ" */
+.btn-outline-dark.add-to-cart:hover {
+    color: #e74c3c; /* Màu chữ đỏ khi hover */
+    border-color: #e74c3c; /* Đường viền đỏ khi hover */
+}
+
+/* Đảm bảo liên kết bên trong nút cũng đổi màu */
+.btn-outline-dark.add-to-cart:hover a {
+    color: #e74c3c; /* Màu chữ của liên kết bên trong */
+    text-decoration: none; /* Bỏ gạch chân khi hover */
+}
+/* Định dạng nút "View options" và "Thêm vào giỏ" */
+.btn-outline-dark {
+    width: 100%;
+    /* Nút chiếm toàn bộ chiều rộng */
+    margin-bottom: 5px;
+    /* Khoảng cách giữa các nút */
+}
+.btn-outline-dark .add-to-cart{
+    text-decoration: none;
+}
+
+/* Hiệu ứng hover cho nút "Thêm vào giỏ" */
+.btn-outline-dark.add-to-cart:hover {
+    color: #e74c3c; /* Màu chữ đỏ khi hover */
+    border-color: #e74c3c; /* Đường viền đỏ khi hover */
+}
+
+/* Đảm bảo liên kết bên trong nút cũng đổi màu */
+.btn-outline-dark.add-to-cart:hover a {
+    color: #e74c3c; /* Màu chữ của liên kết bên trong */
+    text-decoration: none; /* Bỏ gạch chân khi hover */
+}
+.btn-outline-dark.add-to-cart:hover {
+    background-color: #e74c3c; /* Màu nền đỏ */
+    color: #fff; /* Màu chữ trắng */
+    border-color: #e74c3c;
+}
+
+.btn-outline-dark.add-to-cart:hover a {
+    color: #fff; /* Màu chữ trắng cho liên kết */
+}
+

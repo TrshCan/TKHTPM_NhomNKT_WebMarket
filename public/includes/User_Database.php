@@ -22,5 +22,18 @@ class User_Database {
         
         return $result->fetch_assoc();
     }
+
+    public function getUserInfo2($email) {
+        if (!$this->connection) {
+            return null;
+        }
+
+        $stmt = $this->connection->prepare("SELECT * FROM users WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        return $result->fetch_assoc();
+    }
 }
 ?>
