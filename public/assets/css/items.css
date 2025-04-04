@@ -217,7 +217,7 @@ nav ul li a:hover {
   text-align: center;
   display: flex;
   flex-direction: column;
-  height: 400px; /* Đặt chiều cao cố định cho sản phẩm */
+  height: 200px; /* Đặt chiều cao cố định cho sản phẩm */
 }
 
 .related-products .product img {

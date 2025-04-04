@@ -40,7 +40,7 @@
             <section class="product-section">
                 <div class="container px-4 px-lg-5 my-5">
                     <div class="row gx-4 gx-lg-5 align-items-center">
-                        <div class="col-md-6"><img src="../assets/images/<?= $value["image"] ?>" alt="<?= $value["name"] ?>" />
+                        <div class="col-md-6"><img width="600" height="500" src="../assets/images/<?= $value["image"] ?>" alt=" <?= $value["name"] ?> " />
                         </div>
                         <div class="col-md-6">
                             <div class="small mb-1">Mã: <?= $value["product_id"] ?></div>
@@ -49,19 +49,19 @@
                                 <span><?= number_format($value["price"], 0, ',', '.') ?>đ</span>
                             </div>
                             <p class="lead"><?= $value["description"] ?></p>
-                            <div class="mb-3">
+                            <!-- <div class="mb-3">
                                 <label class="form-label">Kích Thước:</label>
-                                <button class="size-option">S</button>
+                                <button class="size-option t">S</button>
                                 <button class="size-option">M</button>
                                 <button class="size-option">L</button>
                                 <button class="size-option">XL</button>
-                            </div>
-                            <div class="mb-3">
+                            </div> -->
+                            <!-- <div class="mb-3">
                                 <label class="form-label">Màu Sắc:</label>
                                 <span class="color-option" style="background-color: white;"></span>
                                 <span class="color-option" style="background-color: black;"></span>
                                 <span class="color-option" style="background-color: gray;"></span>
-                            </div>
+                            </div> -->
                             <div class="d-flex">
                                 <input class="form-control text-center me-3" id="inputQuantity" type="number" value="1"
                                     style="max-width: 3rem" />

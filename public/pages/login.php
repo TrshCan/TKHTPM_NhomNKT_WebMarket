@@ -1,4 +1,6 @@
+
 <?php
+include '../includes/header.php';
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -49,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 <body>
 
-<?php include '../includes/header.php'; ?>
+
     <main class="container">
         <div class="row justify-content-center">
             <div class="col-md-5">
@@ -75,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </main>
 
-<?php include '../includes/footer.php'; ?>
+<?php include '../../footer.php'; ?>
 </body>
 </html>
 

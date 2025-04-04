@@ -63,16 +63,14 @@ if (!empty($_SESSION['cart'])) {
             </table>
         </div>
         <div class="d-flex justify-content-end gap-3">
-            <a href="#" onclick="confirmDeleteAll()" class="btn btn-warning">Xóa Tất Cả</a>
-            <a href="checkout.php" class="btn btn-primary checkout-btn">Thanh Toán</a>
+            <a href="#" onclick="confirmDeleteAll()" class="btn btn-warning my-4">Xóa Tất Cả</a>
+            <a href="checkout.php" class="btn btn-primary checkout-btn my-4">Thanh Toán</a>
         </div>
     <?php endif; ?>
 </main>
 
 <!-- Footer -->
-<footer class="bg-dark text-white text-center py-3 mt-4">
-    <p>© 2025 Website Bán Hàng. All rights reserved.</p>
-</footer>
+<?php include '../../footer.php';?>
 
 <script src="../bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

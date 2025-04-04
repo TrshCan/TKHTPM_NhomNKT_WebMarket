@@ -1,4 +1,4 @@
-<?php include "public/includes/header.php" ?>
+<?php include "header.php" ?>
 <?php
 include "public/includes/db.php";
 include "public/includes/Products.php";
@@ -183,7 +183,7 @@ $products = (new ProductModel())->getProducts();
         </div>
     </section>
 
-    <?php include "public/includes/footer.php" ?>
+    <?php include "footer.php" ?>
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
