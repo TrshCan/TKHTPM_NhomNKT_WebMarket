@@ -33,7 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $error = checkRegister($displayName, $email, $phone, $address, $password);
     if ($error == "") {
-        header("Location:../../index.php"); 
+        $_SESSION['registration_success'] = true; // Set session variable to indicate success
+        header("Location: register.php"); 
         exit();
     }
 }
@@ -83,14 +84,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
             <div class="row mt-3">
                 <div class="col-md-12">
-                    <button type="submit" class="btn btn-primary">Đăng Ký</button>
+                    <div style="display: flex; justify-content: center;">
+                        <button type="submit" class="btn btn-primary">Đăng Ký</button>
+                    </div>
                     <p style="text-align: center;">Đã có tài khoản? <a href="login.php">Đăng Nhập</a></p>
                 </div>
             </div>
         </form>
     </main>
 
-<?php include "../includes/footer.php" ?>
+<?php include "../../footer.php" ?>
+<!-- Modal thông báo đăng ký thành công -->
+<?php if (isset($_SESSION['registration_success']) && $_SESSION['registration_success']): ?>
+    <div class="modal" tabindex="-1" role="dialog" id="successModal" style="display:block;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Đăng ký thành công!</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Bạn đã đăng ký thành công. Bạn sẽ được chuyển đến trang đăng nhập.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="window.location.href='login.php'">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php unset($_SESSION['registration_success']); ?>
+<?php endif; ?>
 </body>
 </html>
 

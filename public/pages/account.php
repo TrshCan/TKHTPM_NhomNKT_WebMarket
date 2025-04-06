@@ -1,8 +1,8 @@
 <?php
+include "../includes/header.php";
 require_once "../includes/User_Database.php";
 $userDb = new User_Database();
 
-session_start();
 
 if (!isset($_SESSION['email'])) {
     header("Location: login.php");
@@ -17,7 +17,7 @@ if (!$user) {
     exit();
 }
 
-include "../includes/header.php";
+
 ?>
 
 <main class="account-page">
@@ -50,4 +50,4 @@ include "../includes/header.php";
     </div>
 </main>
 
-<?php include "../includes/footer.php"; ?>
+<?php include "../../footer.php"; ?>

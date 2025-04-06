@@ -1,3 +1,4 @@
+<?php include "../includes/header.php"; ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,26 +8,77 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>Shop Item - NKT</title>
-    <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
-    <!-- Bootstrap icons-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="../assets/css/items.css">
-
     <style>
-        .product-section .container .d-flex .btn-add-to-cart a {
-            color: #333;
-            text-decoration: none;
-        }
+        /* Cải tiến phần giao diện sản phẩm liên quan */
+        /* Cải tiến phần giao diện sản phẩm liên quan */
+.related-products .product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.related-products .product {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.related-products .product img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.related-products .product h3 {
+    font-size: 1.1rem;
+    margin: 10px 0;
+}
+
+.related-products .product .price {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.related-products .product button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.related-products .product:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.related-products .product button:hover {
+    background-color: #0056b3;
+}
+
+/* Ensuring there's space below the related products section */
+.related-products {
+    margin-bottom: 100px;  /* Adjust the space below the related products section */
+}
+
+/* Ensuring the footer is not overlapped */
+footer {
+    clear: both; /* Clear the float above */
+}
+
     </style>
 </head>
 
 <body>
-    <?php include "../includes/header.php"; ?>
 
     <?php
     require_once "../includes/Product_Database.php";
@@ -36,11 +88,11 @@
         $products = $productsdb->getProductById($product_id);
         foreach ($products as $value) {
     ?>
-            <!-- Product section-->
             <section class="product-section">
                 <div class="container px-4 px-lg-5 my-5">
                     <div class="row gx-4 gx-lg-5 align-items-center">
-                        <div class="col-md-6"><img width="600" height="500" src="../assets/images/<?= $value["image"] ?>" alt=" <?= $value["name"] ?> " />
+                        <div class="col-md-6">
+                            <img width="600" height="500" src="../assets/images/<?= $value["image"] ?>" alt="<?= $value["name"] ?>" />
                         </div>
                         <div class="col-md-6">
                             <div class="small mb-1">Mã: <?= $value["product_id"] ?></div>
@@ -49,24 +101,10 @@
                                 <span><?= number_format($value["price"], 0, ',', '.') ?>đ</span>
                             </div>
                             <p class="lead"><?= $value["description"] ?></p>
-                            <!-- <div class="mb-3">
-                                <label class="form-label">Kích Thước:</label>
-                                <button class="size-option t">S</button>
-                                <button class="size-option">M</button>
-                                <button class="size-option">L</button>
-                                <button class="size-option">XL</button>
-                            </div> -->
-                            <!-- <div class="mb-3">
-                                <label class="form-label">Màu Sắc:</label>
-                                <span class="color-option" style="background-color: white;"></span>
-                                <span class="color-option" style="background-color: black;"></span>
-                                <span class="color-option" style="background-color: gray;"></span>
-                            </div> -->
                             <div class="d-flex">
-                                <input class="form-control text-center me-3" id="inputQuantity" type="number" value="1"
-                                    style="max-width: 3rem" />
+                                <input class="form-control text-center me-3" id="inputQuantity" type="number" value="1" style="max-width: 3rem" />
                                 <button class="btn-add-to-cart flex-shrink-0">
-                                    <a href="../includes/cart_crud.php?action=add&id=<?php echo $value['product_id']; ?>&quantity=1">Thêm vào giỏ</a>
+                                    <a style="text-decoration: none;" href="../includes/cart_crud.php?action=add&id=<?php echo $value['product_id']; ?>&quantity=1">Thêm vào giỏ</a>
                                 </button>
                                 <button class="btn-buy-now flex-shrink-0" type="button">
                                     Mua Ngay
@@ -81,9 +119,8 @@
     }
     ?>
 
-    <!-- Related items section-->
-    <section class="related-products">
-        <div class="container px-4 px-lg-5 mt-5">
+    <section class="related-products mt-3">
+        <div class="container px-3 px-lg-5">
             <h2 class="fw-bolder mb-4">Sản Phẩm Liên Quan</h2>
             <div class="product-list">
                 <?php
@@ -94,7 +131,9 @@
                         <img src="../assets/images/<?= $related["image"] ?>" alt="<?= $related["name"] ?>" />
                         <h3><?= $related["name"] ?></h3>
                         <p class="price"><?= number_format($related["price"], 0, ',', '.') ?>đ</p>
-                        <button class="add-to-cart">Thêm Vào Giỏ</button>
+                        <button class="add-to-cart">
+                            <a class="text-white" href="../includes/cart_crud.php?action=add&id=<?= $related["product_id"] ?>&quantity=1">Thêm Vào Giỏ</a>
+                        </button>
                     </div>
                 <?php
                 }
@@ -103,14 +142,10 @@
         </div>
     </section>
 
-    <?php include "../includes/footer.php" ?>
-
-    <!-- Bootstrap core JS-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
-    </script>
-    <!-- Core theme JS-->
+    
     <script src="js/scripts.js"></script>
+    <?php include "../../footer.php" ?>
 </body>
 
 </html>
+

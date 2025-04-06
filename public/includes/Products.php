@@ -38,5 +38,20 @@ class ProductModel {
 
         return $product;
     }
+    
+    public function getTotalProducts() {
+        $conn = $this->db->connect();
+        $sql = "SELECT COUNT(*) as total FROM products";
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            $total = $result->fetch_assoc()['total'];
+        } else {
+            $total = 0;
+        }
+        $conn->close();
+
+        return $total;
+    }
 }
 ?>

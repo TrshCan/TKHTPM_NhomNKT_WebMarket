@@ -30,35 +30,43 @@ class Product_Database extends Database
     //     $this->category_id = $category_id;
     // }
 
-    public function getProductId() {
+    public function getProductId()
+    {
         return $this->product_id;
     }
 
-    public function getCategoryId() {
+    public function getCategoryId()
+    {
         return $this->category_id;
     }
 
-    public function getName() {
+    public function getName()
+    {
         return $this->name;
     }
 
-    public function getDescription() {
+    public function getDescription()
+    {
         return $this->description;
     }
 
-    public function getImage() {
+    public function getImage()
+    {
         return $this->image;
     }
 
-    public function getPrice() {
+    public function getPrice()
+    {
         return $this->price;
     }
 
-    public function getStock() {
+    public function getStock()
+    {
         return $this->stock;
     }
 
-    public function getStatus() {
+    public function getStatus()
+    {
         return $this->status;
     }
 
@@ -70,6 +78,34 @@ class Product_Database extends Database
         $item = $sql->get_result()->fetch_all(MYSQLI_ASSOC);
         return $item;
     }
+
+    public function getProducts($category_id = null, $offset = 0, $limit = 10)
+    {
+        $sql = self::$connection->prepare("SELECT * FROM products WHERE 1=1");
+        if ($category_id) {
+            $sql->prepare("SELECT * FROM products WHERE category_id = ? LIMIT ?, ?");
+            $sql->bind_param("iii", $category_id, $offset, $limit);
+        } else {
+            $sql->prepare("SELECT * FROM products LIMIT ?, ?");
+            $sql->bind_param("ii", $offset, $limit);
+        }
+        $sql->execute();
+        $result = $sql->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function getTotalProducts($category_id = null)
+    {
+        $sql = self::$connection->prepare("SELECT COUNT(*) as total FROM products WHERE 1=1");
+        if ($category_id) {
+            $sql->prepare("SELECT COUNT(*) as total FROM products WHERE category_id = ?");
+            $sql->bind_param("i", $category_id);
+        }
+        $sql->execute();
+        $result = $sql->get_result();
+        return $result->fetch_assoc()['total'];
+    }
+
 
     public function getProductById($product_id)
     {
@@ -88,36 +124,49 @@ class Product_Database extends Database
         $result = $sql->get_result();
         return $result->fetch_assoc();
     }
-    
-    
+
+
     public function searchProducts($keyword)
     {
         $sql = self::$connection->prepare("SELECT * FROM products WHERE name LIKE ? OR description LIKE ?");
         if (!$sql) {
             die("Lỗi truy vấn: " . self::$connection->error);
         }
-    
+
         $keyword = '%' . $keyword . '%';
         $sql->bind_param("ss", $keyword, $keyword);
         $sql->execute();
-        
+
         $result = $sql->get_result();
         $items = $result->fetch_all(MYSQLI_ASSOC);
-    
+
         $sql->close(); // Đóng truy vấn để tránh rò rỉ bộ nhớ
         return $items;
     }
-    
+
     public function getRelatedProducts($product_id)
     {
-        $sql = self::$connection->prepare("SELECT * FROM products WHERE category_id = (SELECT category_id FROM products WHERE product_id = ?) AND product_id != ? LIMIT 4");
+        $sql = self::$connection->prepare("SELECT * FROM products WHERE category_id IN (SELECT category_id FROM products WHERE product_id = ?) AND product_id != ? LIMIT 4");
+
+
         $sql->bind_param("ii", $product_id, $product_id);
+
+
         $sql->execute();
+
+
         $result = $sql->get_result();
+
+
         $items = $result->fetch_all(MYSQLI_ASSOC);
+
+
         $sql->close();
+
+
         return $items;
     }
+
     public function delateProduct($id)
     {
         $sql = self::$connection->prepare("DELETE FROM products WHERE product_id=?");
@@ -126,13 +175,14 @@ class Product_Database extends Database
 
         return $result;
     }
-    public function addProduct($category_id, $name, $description, $image, $price, $stock, $status) {
+    public function addProduct($category_id, $name, $description, $image, $price, $stock, $status)
+    {
         $sql = self::$connection->prepare("INSERT INTO products (category_id, name, description, image, price, stock, status) VALUES (?,?,?,?,?,?,?)");
         $sql->bind_param("isssiis", $category_id, $name, $description, $image, $price, $stock, $status);
         $result = $sql->execute();
         return $result;
     }
-    
+
 
     // Update function for a product
     public function UpdateProduct($id, $name, $price, $desc, $image, $category_id)
@@ -152,6 +202,4 @@ class Product_Database extends Database
         // Return the result of the execution
         return $result;
     }
-
 }
-

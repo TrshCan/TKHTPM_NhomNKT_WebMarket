@@ -15,7 +15,7 @@ if (!empty($searchTerm)) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kết Quả Tìm Kiếm</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <link rel="stylesheet" href="./public/assets/css/style.css">
     <style>
@@ -147,7 +147,7 @@ if (!empty($searchTerm)) {
                                 <img class="card-img-top" src="..//assets/images/<?= htmlspecialchars($product['image']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" />
                                 <div class="card-body p-4">
                                     <div class="text-center">
-                                        <a href="../pages/items.php?product_id=<?= $product['product_id'] ?>" class="product-name">
+                                        <a href="items.php?product_id=<?= $product['product_id'] ?>" class="product-name">
                                             <?= htmlspecialchars($product['name']) ?>
                                         </a>
                                         <p class="lead"><?= $product["description"] ?></p>
@@ -156,9 +156,9 @@ if (!empty($searchTerm)) {
                                 </div>
                                 <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                                     <div class="text-center">
-                                        <a class="btn btn-outline-dark mt-auto" href="public/pages/items.php?product_id=<?= $product['product_id'] ?>">View options</a>
+                                        <a class="btn btn-outline-dark mt-auto" href="items.php?product_id=<?= $product['product_id'] ?>">View options</a>
                                         <button class="btn btn-outline-dark mt-2 add-to-cart">
-                                            <a href="public/includes/cart_crud.php?action=add&id=<?= $product['product_id'] ?>&quantity=1">Thêm vào giỏ</a>
+                                            <a href="../includes/cart_crud.php?action=add&id=<?= $product['product_id'] ?>&quantity=1">Thêm vào giỏ</a>
                                         </button>
                                     </div>
                                 </div>
@@ -172,7 +172,7 @@ if (!empty($searchTerm)) {
         </div>
     </section>
     
-    <?php include "../includes/footer.php"; ?>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <?php include "../../footer.php"; ?>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> -->
 </body>
 </html>

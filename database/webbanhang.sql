@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th3 26, 2025 lúc 04:06 PM
+-- Thời gian đã tạo: Th4 06, 2025 lúc 11:58 AM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.3.17
 
@@ -52,12 +52,11 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`category_id`, `category_name`) VALUES
-(1, 'Áo'),
-(2, 'Quần'),
+(1, 'Áo Quần Nam'),
+(2, 'Áo Quần Nữ'),
 (3, 'Giày Dép'),
-(4, 'Phụ Kiện'),
-(5, 'Túi Xách'),
-(6, 'Đồng Hồ');
+(4, 'Thiết Bị Điện Tử'),
+(5, 'Đồ Gia Dụng');
 
 -- --------------------------------------------------------
 
@@ -69,8 +68,6 @@ CREATE TABLE `orders` (
   `order_id` int(11) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
   `total_price` decimal(10,2) NOT NULL CHECK (`total_price` >= 0),
-  `payment_method` ENUM('cod', 'bank', 'e-wallet') NOT NULL,
-  `address` VARCHAR(255) NOT NULL,
   `status` enum('đang chờ','đã giao','hoàn thành') DEFAULT 'đang chờ'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -94,14 +91,6 @@ CREATE TABLE `order_details` (
   `quantity` int(11) NOT NULL CHECK (`quantity` > 0),
   `price` decimal(10,2) NOT NULL CHECK (`price` >= 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Đang đổ dữ liệu cho bảng `order_details`
---
-
-INSERT INTO `order_details` (`order_detail_id`, `order_id`, `product_id`, `quantity`, `price`) VALUES
-(1, 1, 1, 2, 250000.00),
-(2, 1, 2, 1, 500000.00);
 
 -- --------------------------------------------------------
 
@@ -145,14 +134,56 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`product_id`, `category_id`, `name`, `description`, `image`, `price`, `stock`, `status`) VALUES
-(1, 1, 'Áo Thun Nam', 'Áo thun nam chất liệu cotton', 'aothun.jpg', 250000.00, 50, 'có sẵn'),
-(2, 2, 'Quần Jean Nam', 'Quần jean nam cao cấp', 'quanjean.jpg', 500000.00, 30, 'có sẵn'),
-(9, 2, 'Quần Kaki Nam', 'Quần kaki trẻ trung', 'kaki.jpg', 350000.00, 25, 'có sẵn'),
-(10, 3, 'Giày Sneaker', 'Sneaker phong cách', 'sneaker.jpg', 800000.00, 15, 'có sẵn'),
-(11, 3, 'Giày Tây Nam', 'Giày tây lịch lãm', 'giaytay.jpg', 700000.00, 10, 'có sẵn'),
-(12, 4, 'Mũ Lưỡi Trai', 'Mũ cá tính', 'mu.jpg', 150000.00, 60, 'có sẵn'),
-(13, 4, 'Túi Đeo Chéo', 'Túi nhỏ gọn tiện lợi', 'tui.jpg', 320000.00, 35, 'có sẵn'),
-(14, 4, 'Đồng Hồ Nam', 'Đồng hồ thời trang', 'dongho.jpg', 1200000.00, 5, 'hết hàng');
+(1, 1, 'Áo Sơ Mi Nam', 'Áo sơ mi nam đẹp', 'image1.jpg', 200000.00, 10, 'có sẵn'),
+(2, 2, 'Áo Phông Nữ', 'Áo phông nữ đẹp', 'image2.jpg', 150000.00, 15, 'có sẵn'),
+(3, 3, 'Giày Thể Thao', 'Giày thể thao chất lượng', 'image3.jpg', 350000.00, 20, 'hết hàng'),
+(4, 1, 'Quần Jean Nam', 'Quần jean nam thời trang', 'image4.jpg', 250000.00, 25, 'có sẵn'),
+(5, 2, 'Chân Váy Nữ', 'Chân váy nữ đẹp', 'image5.jpg', 180000.00, 30, 'có sẵn'),
+(6, 3, 'Giày Da Nam', 'Giày da nam sang trọng', 'image6.jpg', 500000.00, 10, 'hết hàng'),
+(7, 4, 'Laptop Dell', 'Laptop Dell XPS 13', 'image7.jpg', 12000000.00, 5, 'có sẵn'),
+(8, 5, 'Tủ Lạnh Samsung', 'Tủ lạnh Samsung inverter', 'image8.jpg', 8000000.00, 8, 'có sẵn'),
+(9, 1, 'Áo Khoác Nam', 'Áo khoác nam ấm áp', 'image9.jpg', 350000.00, 12, 'có sẵn'),
+(10, 2, 'Áo Len Nữ', 'Áo len nữ thời trang', 'image10.jpg', 200000.00, 15, 'hết hàng'),
+(11, 3, 'Giày Converse', 'Giày thể thao Converse', 'image11.jpg', 750000.00, 18, 'có sẵn'),
+(12, 4, 'Điện Thoại iPhone 14', 'Điện thoại iPhone 14 chính hãng', 'image12.jpg', 22000000.00, 10, 'hết hàng'),
+(13, 5, 'Máy Giặt LG', 'Máy giặt LG công nghệ tiên tiến', 'image13.jpg', 9000000.00, 7, 'có sẵn'),
+(14, 1, 'Áo Thun Nam', 'Áo thun nam cổ tròn', 'image14.jpg', 150000.00, 20, 'có sẵn'),
+(15, 2, 'Đầm Nữ', 'Đầm nữ đi tiệc', 'image15.jpg', 350000.00, 25, 'có sẵn'),
+(16, 3, 'Giày Adidas', 'Giày Adidas thời trang', 'image16.jpg', 1200000.00, 15, 'hết hàng'),
+(17, 4, 'Smartwatch Samsung', 'Đồng hồ thông minh Samsung', 'image17.jpg', 3500000.00, 10, 'có sẵn'),
+(18, 5, 'Máy Xay Sinh Tố', 'Máy xay sinh tố đa năng', 'image18.jpg', 700000.00, 20, 'hết hàng'),
+(19, 1, 'Áo Sơ Mi Họa Tiết', 'Áo sơ mi họa tiết độc đáo', 'image19.jpg', 220000.00, 22, 'có sẵn'),
+(20, 2, 'Áo Khoác Nữ', 'Áo khoác nữ ấm áp', 'image20.jpg', 300000.00, 30, 'hết hàng'),
+(21, 3, 'Giày Bóng Đá', 'Giày bóng đá Nike', 'image21.jpg', 1500000.00, 25, 'có sẵn'),
+(22, 4, 'Tai Nghe Bluetooth', 'Tai nghe Bluetooth chất lượng', 'image22.jpg', 800000.00, 10, 'có sẵn'),
+(23, 5, 'Lò Vi Sóng Panasonic', 'Lò vi sóng Panasonic hiện đại', 'image23.jpg', 1800000.00, 5, 'hết hàng'),
+(24, 1, 'Áo Phông Nam', 'Áo phông nam cotton', 'image24.jpg', 120000.00, 18, 'có sẵn'),
+(25, 2, 'Áo Vest Nữ', 'Áo vest nữ thanh lịch', 'image25.jpg', 550000.00, 12, 'có sẵn'),
+(26, 3, 'Giày Boots Nam', 'Giày boots nam cao cấp', 'image26.jpg', 900000.00, 15, 'hết hàng'),
+(27, 4, 'Tivi Sony', 'Tivi Sony 55 inch 4K', 'image27.jpg', 15000000.00, 10, 'có sẵn'),
+(28, 5, 'Máy Pha Cà Phê', 'Máy pha cà phê tự động', 'image28.jpg', 5000000.00, 8, 'có sẵn'),
+(29, 1, 'Áo Sơ Mi Caro', 'Áo sơ mi caro đẹp', 'image29.jpg', 240000.00, 20, 'hết hàng'),
+(30, 2, 'Quần Legging Nữ', 'Quần legging nữ thời trang', 'image30.jpg', 180000.00, 15, 'có sẵn'),
+(31, 3, 'Giày Thể Thao Nike', 'Giày thể thao Nike chất lượng', 'image31.jpg', 1800000.00, 12, 'có sẵn'),
+(32, 4, 'Loa Bluetooth JBL', 'Loa Bluetooth JBL chất lượng', 'image32.jpg', 1000000.00, 10, 'hết hàng'),
+(33, 5, 'Máy Hút Bụi', 'Máy hút bụi công suất lớn', 'image33.jpg', 2000000.00, 5, 'có sẵn'),
+(34, 1, 'Áo Len Nam', 'Áo len nam giữ ấm', 'image34.jpg', 250000.00, 25, 'có sẵn'),
+(35, 2, 'Áo Khoác Dạ Nữ', 'Áo khoác dạ nữ đẹp', 'image35.jpg', 500000.00, 20, 'hết hàng'),
+(36, 3, 'Giày Sandal Nữ', 'Giày sandal nữ dễ thương', 'image36.jpg', 350000.00, 18, 'có sẵn'),
+(37, 4, 'Máy Tính Bảng Samsung', 'Máy tính bảng Samsung Galaxy Tab', 'image37.jpg', 10000000.00, 8, 'có sẵn'),
+(38, 5, 'Quạt Điện', 'Quạt điện công suất mạnh', 'image38.jpg', 600000.00, 15, 'hết hàng'),
+(39, 1, 'Áo Thun Nam Có Cổ', 'Áo thun nam có cổ đẹp', 'image39.jpg', 180000.00, 22, 'có sẵn'),
+(40, 2, 'Áo Croptop Nữ', 'Áo croptop nữ thời trang', 'image40.jpg', 120000.00, 18, 'có sẵn'),
+(41, 3, 'Giày Thể Thao Puma', 'Giày thể thao Puma chất lượng', 'image41.jpg', 1200000.00, 15, 'hết hàng'),
+(42, 4, 'Máy Chiếu Mini', 'Máy chiếu mini di động', 'image42.jpg', 3000000.00, 10, 'có sẵn'),
+(43, 5, 'Bàn Ủi', 'Bàn ủi hơi nước', 'image43.jpg', 500000.00, 25, 'có sẵn'),
+(44, 1, 'Áo Sơ Mi Xanh', 'Áo sơ mi xanh cho nam', 'image44.jpg', 200000.00, 30, 'hết hàng'),
+(45, 2, 'Áo Khoác Nữ Hàn Quốc', 'Áo khoác nữ Hàn Quốc', 'image45.jpg', 400000.00, 20, 'có sẵn'),
+(46, 3, 'Giày Sandal Nam', 'Giày sandal nam', 'image46.jpg', 250000.00, 18, 'có sẵn'),
+(47, 4, 'Tai Nghe Sony', 'Tai nghe Sony chất lượng cao', 'image47.jpg', 1500000.00, 10, 'hết hàng'),
+(48, 5, 'Nồi Cơm Điện', 'Nồi cơm điện cao tần', 'image48.jpg', 700000.00, 12, 'có sẵn'),
+(49, 1, 'Áo Thun Nam Cổ Tròn', 'Áo thun nam cổ tròn', 'image49.jpg', 140000.00, 25, 'hết hàng'),
+(50, 2, 'Đầm Dự Tiệc Nữ', 'Đầm dự tiệc nữ cao cấp', 'image50.jpg', 600000.00, 15, 'có sẵn');
 
 -- --------------------------------------------------------
 
@@ -177,7 +208,22 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`user_id`, `name`, `email`, `password`, `phone`, `address`, `role`, `created_at`) VALUES
 (1, 'Nguyễn Văn A', 'nguyenvana@gmail.com', '123456', '0123456789', 'Hà Nội', 'user', '2025-03-26 10:58:19'),
-(2, 'Admin B', 'adminb@gmail.com', 'admin123', '0987654321', 'TP.HCM', 'admin', '2025-03-26 10:58:19');
+(2, 'Admin B', 'adminb@gmail.com', 'admin123', '0987654321', 'TP.HCM', 'admin', '2025-03-26 10:58:19'),
+(3, 'hehuhu', 'nooobao86@gmail.com', '$2y$10$DhYVkG5gNCI0fVAYQ0Gv3OusbYxlGlKhXFsgNdA5DAtPQoH.DoTke', NULL, NULL, 'user', '2025-03-27 06:30:10'),
+(4, 'anh ba', 'test@gmail.com', '$2y$10$vJzNHKUEmdCOiPx0qwao7.f/5Jh.1eBZkhVzmhyPTA1ahQLzeNSKO', '08262626', 'TP Hồ Chí Minh', 'user', '2025-03-27 06:33:24'),
+(5, 'Anh Tư', 'anhtumientrung@gmail.com', '$2y$10$b6Q6xkYMdT2D46JHjRdEguYDctGx1pg.GI/rfXcKpyciiBl/kRd9S', '09091509', '34 vũ tùng', 'user', '2025-03-27 09:40:12'),
+(6, 'Cậu ba', 'cauba@gmail.com', '$2y$10$TXqxwaZsl1GH/gza3bcI0.fesnlAjO68DO5xZ2dO/phko28J3NxxG', '012904091', 'sàasfa', 'user', '2025-03-27 09:43:43'),
+(7, 'A Mẫn', 'aman@gmail.com', '$2y$10$MQ1OT8T5okxerD7OLgZNBOkOh6NnUNUp50b5rBrdXyOB9IAWgzN3G', '09128418', 'con là con ', 'user', '2025-03-27 11:54:01'),
+(8, 'A báo', 'abao@gmail.com', '$2y$10$iQFVWVXS5jWV3jrTogpkeenGsIg.R7HAK3rEChoQlZ//ARaI1CwVi', '22222222222', 'sadasd', 'user', '2025-03-27 11:55:01'),
+(9, 'lần cuối ta đi bên nhau', 'huhu@gmail.com', '$2y$10$5RTeFCHBesvABZNtCktkluEv2HCFOdpPwZhVx9ncUJQWIQBF3ezJW', '123123', 'sadasfas', 'user', '2025-03-27 12:54:05'),
+(11, 'anh ba chà cú', 'anhbachacu@gmail.com', '$2y$10$8HTK6vRXZxgoGCXXVZghM.GbwNLi880hjXHxWZZSYimPhAdD3Ub7u', '08666633426', '123123', 'user', '2025-04-06 08:59:57'),
+(12, 'anhhai', 'anhhai@gmail.com', '$2y$10$RKo7QhA5xYQCjv3UgONncu//PIIdxCYBFm1zVawJxow2bW2dn6lXu', '0949629860', '213123', 'user', '2025-04-06 09:00:59'),
+(14, 'anhhaioi', 'anhhaioi@gmail.com', '$2y$10$nJge1frgHr7wX1V5Fn7g2eI64XAsP47KFHTffAZEprPV.IHgJFgL2', '010101010', 'asdasd', 'user', '2025-04-06 09:06:13'),
+(15, 'kimoanh', 'kimoanh@gmail.com', '$2y$10$SbE4sJVjno/7XcLAaMLPN.Y8hI.l/6/MiDulDsJJBEXdLxgJSaFk.', '222223333', '123123', 'user', '2025-04-06 09:09:11'),
+(16, 'phamthikimon', 'ptko@gmail.com', '$2y$10$WoD0yYpIvNoF5xUEaWfGreuE6GDAcclsqjKyFaC1wkRy4Y5Fybc1C', '8686868', '123', 'user', '2025-04-06 09:11:50'),
+(17, 'cauba', 'cuba@gmail.com', '$2y$10$u6Z9s/fSplqRVKItihhvg.jcEOHujOhh4adhTUnPDhtI6YEP5fCHO', '189898', '123', 'user', '2025-04-06 09:15:35'),
+(18, 'chiyeuminhem', 'chiyeuminhem@gmail.com', '$2y$10$X9XBrewwcc61oGO2RcWkjOtsorSmFsOIXS2bMHE9YIoIhNnL7THvK', '666666', '213123', 'user', '2025-04-06 09:17:32'),
+(19, '1lannua', '1lannua@gmail.com', '$2y$10$K2zpRtgwqqdQVGXL4d/xcOc3yy/yM3xQBSGJkx3k5IpjBa4CbjlHq', '3456678', '123123', 'user', '2025-04-06 09:19:28');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -272,13 +318,13 @@ ALTER TABLE `payments`
 -- AUTO_INCREMENT cho bảng `products`
 --
 ALTER TABLE `products`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT cho bảng `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- Các ràng buộc cho các bảng đã đổ

@@ -1,9 +1,23 @@
 <?php include "header.php" ?>
 <?php
 include "public/includes/db.php";
-include "public/includes/Products.php";
+include "public/includes/Product_Database.php";
+include "public/includes/Categories_Database.php";
 
-$products = (new ProductModel())->getProducts();
+$products = (new Product_Database())->getAllProducts();
+$categories = (new Categories_Database())->getCategories();
+// Xử lý lọc theo danh mục
+$category_id = isset($_GET['category_id']) ? $_GET['category_id'] : null;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$per_page = 10; // Số sản phẩm mỗi trang
+$offset = ($page - 1) * $per_page;
+
+// Lấy sản phẩm theo danh mục hoặc tất cả sản phẩm
+$products = (new Product_Database())->getProducts($category_id, $offset, $per_page);
+
+// Tính toán số trang
+$total_products = (new Product_Database())->getTotalProducts($category_id);
+$total_pages = ceil($total_products / $per_page);
 ?>
 
 <!DOCTYPE html>
@@ -14,176 +28,231 @@ $products = (new ProductModel())->getProducts();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Website Bán Hàng</title>
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> -->
     <!-- Bootstrap icons-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <!-- Custom CSS -->
     <link rel="stylesheet" href="./public/assets/css/style.css">
     <style>
-        /* Định dạng thẻ a trong sản phẩm */
-        .product-name {
-            text-decoration: none;
-            /* Bỏ gạch chân */
-            font-size: 1.5rem;
-            /* Cỡ chữ to hơn (24px) */
-            font-family: 'Roboto', sans-serif;
-            /* Font chữ đẹp */
-            color: #333;
-            /* Màu chữ xám đậm */
-            font-weight: 500;
-            /* Độ đậm vừa phải */
+        /* Giao diện mới cho trang chủ */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
         }
 
-        .product-name:hover {
-            color: #007bff;
-            /* Màu xanh dương khi hover */
-        }
-
-        /* Optional: Định dạng giá sản phẩm */
-        .price {
-            font-size: 1.2rem;
-            /* Cỡ chữ giá */
-            color: #e74c3c;
-            /* Màu đỏ nổi bật */
-            font-weight: bold;
-        }
-
-        /* Định dạng thẻ a trong sản phẩm */
-        .product-name {
-            text-decoration: none;
-            /* Bỏ gạch chân */
-            font-size: 1.5rem;
-            /* Cỡ chữ to hơn (24px) */
-            font-family: 'Roboto', sans-serif;
-            /* Font chữ đẹp */
-            color: #333;
-            /* Màu chữ xám đậm */
-            font-weight: 500;
-            /* Độ đậm vừa phải */
-        }
-
-        .product-name:hover {
-            color: #007bff;
-            /* Màu xanh dương khi hover */
-        }
-
-        /* Định dạng giá sản phẩm */
-        .price {
-            font-size: 1.2rem;
-            /* Cỡ chữ giá */
-            color: #e74c3c;
-            /* Màu đỏ nổi bật */
-            font-weight: bold;
-        }
-
-        /* Cân bằng chiều cao sản phẩm */
-        .card {
-            height: 100%;
-            /* Đảm bảo thẻ card chiếm toàn bộ chiều cao của cột */
+        /* Banner full-screen */
+        .banner {
+            height: 100vh;
+            background: url('public/assets/images/banner.jpg') no-repeat center center;
+            background-size: cover;
+            color: white;
             display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            /* Căn chỉnh nội dung bên trong */
-        }
-
-        /* Cố định chiều cao hình ảnh */
-        .card-img-top {
-            height: 400px;
-            /* Chiều cao cố định cho hình ảnh */
-            object-fit: cover;
-            /* Đảm bảo hình ảnh không bị méo */
-            width: 100%;
-            /* Chiều rộng đầy đủ */
-        }
-
-        /* Đảm bảo phần nội dung bên dưới đồng đều */
-        .card-body {
-            flex-grow: 1;
-            /* Phần nội dung mở rộng để lấp đầy không gian */
-            display: flex;
-            flex-direction: column;
             justify-content: center;
-            /* Căn giữa nội dung */
+            align-items: center;
+            text-align: center;
         }
 
-        /* Đảm bảo phần nút ở dưới cùng */
-        .card-footer {
-            margin-top: auto;
-            /* Đẩy nút xuống dưới cùng */
+        .banner h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            font-weight: bold;
         }
 
-        /* Định dạng nút "View options" và "Thêm vào giỏ" */
-        .btn-outline-dark {
+        .banner p {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .banner button {
+            padding: 15px 40px;
+            background-color: #ff5722;
+            color: white;
+            font-size: 1.2rem;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .banner button:hover {
+            background-color: #e64a19;
+        }
+
+        /* Phần sản phẩm */
+        .products-section {
+            padding: 60px 0;
+            background-color: #ffffff;
+        }
+
+        .products-section h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            font-weight: bold;
+        }
+
+        .product-card {
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .product-card img {
             width: 100%;
-            /* Nút chiếm toàn bộ chiều rộng */
-            margin-bottom: 5px;
-            /* Khoảng cách giữa các nút */
+            height: 300px;
+            object-fit: cover;
+            border-bottom: 2px solid #eee;
         }
 
-        .products .card .card-footer .add-to-cart a {
-            color: #333;
-            text-decoration: none;
+        .product-card-body {
+            padding: 20px;
+            text-align: center;
         }
-        
+
+        .product-card-body h5 {
+            font-size: 1.6rem;
+            margin-bottom: 10px;
+        }
+
+        .product-card-body p {
+            font-size: 1.2rem;
+            color: #777;
+            margin-bottom: 15px;
+        }
+
+        .product-card-body .price {
+            font-size: 1.3rem;
+            color: #ff5722;
+            font-weight: bold;
+        }
+
+        .product-card-footer {
+            padding: 20px;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .product-card-footer .btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .product-card-footer .btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #212529;
+            color: white;
+            text-align: center;
+            padding: 30px 0;
+        }
+
+        .footer a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 
 <body>
     <!-- Banner -->
     <section class="banner">
-        <h1>Chào mừng bạn đến với cửa hàng!</h1>
-        <p>Mua sắm những sản phẩm chất lượng với giá tốt nhất</p>
-        <button>Mua Ngay</button>
+        <div>
+            <h1>Chào Mừng Bạn Đến Với Cửa Hàng!</h1>
+            <p>Khám phá các sản phẩm mới và ưu đãi hấp dẫn</p>
+            <button>Mua Ngay</button>
+        </div>
     </section>
-
-    <!-- Danh sách sản phẩm -->
-    <section class="products">
-        <h2>Sản Phẩm Mới</h2>
-        <div class="container px-4 px-lg-5 mt-5">
-            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                <?php
-                foreach ($products as $product) {
-                ?>
-                    <div class="col mb-5">
-                        <div class="card h-100">
-                            <!-- Product image-->
-                            <img class="card-img-top" src="public/assets/images/<?= $product['image'] ?>"
-                                alt="<?= $product['name'] ?>" />
-                            <!-- Product details-->
-                            <div class="card-body p-4">
-                                <div class="text-center">
-                                    <!-- Product name-->
-                                    <a href="public/pages/items.php?product_id=<?= $product['product_id'] ?>"
-                                        class="product-name">
-                                        <?= $product['name'] ?>
-                                    </a>
-                                    <p class="lead"><?= $product["description"] ?></p>
-                                    <!-- Product price-->
-                                    <p class="price"><?= number_format($product['price'], 0, ',', '.') ?>đ</p>
-                                </div>
-                            </div>
-                            <!-- Product actions-->
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center">
-                                    <a class="btn btn-outline-dark mt-auto"
-                                        href="public/pages/items.php?product_id=<?= $product['product_id'] ?>">View
-                                        options</a>
-                                    <button class="btn btn-outline-dark mt-2 add-to-cart">
-                                        <a href="public/includes/cart_crud.php?action=add&id=<?php echo $product['product_id']; ?>&quantity=1">Thêm vào giỏ</a>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+ <!-- Lọc theo danh mục -->
+ <section class="filter-section">
+        <div class="container">
+            <form action="" method="get">
+                <div class="row">
+                    <div class="col-md-3">
+                        <select name="category_id" class="form-select" onchange="this.form.submit()">
+                            <option value="">Chọn Danh Mục</option>
+                            <?php foreach ($categories as $category) { ?>
+                                <option value="<?= $category['category_id'] ?>" <?= $category['category_id'] == $category_id ? 'selected' : '' ?>><?= $category['category_name'] ?></option>
+                            <?php } ?>
+                        </select>
                     </div>
-                <?php
-                }
-                ?>
-            </div>
+                </div>
+            </form>
         </div>
     </section>
 
-    <?php include "footer.php" ?>
+   <!-- Danh sách sản phẩm -->
+   <section class="products-section">
+        <div class="container">
+            <div class="row">
+                <?php foreach ($products as $product) { ?>
+                    <div class="col-md-4 mb-4">
+                        <div class="product-card">
+                            <img src="public/assets/images/<?= $product['image'] ?>" alt="<?= $product['name'] ?>" />
+                            <div class="product-card-body">
+                                <h5><?= $product['name'] ?></h5>
+                                <p><?= $product["description"] ?></p>
+                                <p class="price"><?= number_format($product['price'], 0, ',', '.') ?>đ</p>
+                            </div>
+                            <div class="product-card-footer">
+                                <a href="public/pages/items.php?product_id=<?= $product['product_id'] ?>" class="btn">Xem Chi Tiết</a>
+                                <a href="public/includes/cart_crud.php?action=add&id=<?= $product['product_id'] ?>&quantity=1" class="btn">Thêm vào Giỏ</a>
+                            </div>
+                        </div>
+                    </div>
+                <?php } ?>
+            </div>
+
+            <!-- Phân trang -->
+            <div class="pagination">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item <?= $page <= 1 ? 'disabled' : '' ?>">
+                        <a class="page-link" href="?page=<?= $page - 1 ?>&category_id=<?= $category_id ?>" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <?php for ($i = 1; $i <= $total_pages; $i++) { ?>
+                        <li class="page-item <?= $i == $page ? 'active' : '' ?>">
+                            <a class="page-link" href="?page=<?= $i ?>&category_id=<?= $category_id ?>"><?= $i ?></a>
+                        </li>
+                    <?php } ?>
+                    <li class="page-item <?= $page >= $total_pages ? 'disabled' : '' ?>">
+                        <a class="page-link" href="?page=<?= $page + 1 ?>&category_id=<?= $category_id ?>" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 Cửa Hàng Online</p>
+        <p><a href="#">Chính Sách Bảo Mật</a> | <a href="#">Điều Khoản Dịch Vụ</a></p>
+    </footer>
+
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
