@@ -244,7 +244,8 @@ $total_pages = ceil($total_products / $per_page);
                             src="./public/assets/images/<?= htmlspecialchars($product['image']) ?>"
                             alt="<?= htmlspecialchars($product['name']) ?>" />
                         <div class="card-body product-card-body">
-                            <a href="items.php?product_id=<?= $product['product_id'] ?>" class="product-name">
+                            <a href="public/pages/items.php?product_id=<?= $product['product_id'] ?>"
+                                class="product-name">
                                 <?= htmlspecialchars($product['name']) ?>
                             </a>
                             <p><?= htmlspecialchars($product['description']) ?></p>
