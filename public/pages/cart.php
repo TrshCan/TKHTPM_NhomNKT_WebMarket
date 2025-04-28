@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../includes/header.php';
+include '../../header.php';
 include '../includes/Product_Database.php';
 
 $products = new Product_Database();
@@ -19,7 +19,7 @@ if (!empty($_SESSION['cart'])) {
     <h1 class="text-center mb-4">Giỏ Hàng</h1>
     <?php if (empty($_SESSION['cart'])): ?>
         <div class="alert alert-info text-center" role="alert">
-            Giỏ hàng của bạn đang trống. <a href="<?= $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST']; ?>/TKHTPM_NhomNKT_WebMarket.git/index.php" class="alert-link">Tiếp tục mua sắm!</a>
+            Giỏ hàng của bạn đang trống. <a href="<?php echo BASE_URL; ?>index.php" class="alert-link">Tiếp tục mua sắm!</a>
         </div>
     <?php else: ?>
         <div class="table-responsive">

@@ -39,4 +39,16 @@ class User_Database
 
         return $result->fetch_assoc();
     }
+    public function updatePassword($email, $password_hash) {
+    $conn = new mysqli("localhost", "root", "", "webbanhang");
+    if ($conn->connect_error) {
+        return false;
+    }
+    $stmt = $conn->prepare("UPDATE users SET password = ? WHERE email = ?");
+    $stmt->bind_param("ss", $password_hash, $email);
+    $success = $stmt->execute();
+    $stmt->close();
+    $conn->close();
+    return $success;
+}
 }

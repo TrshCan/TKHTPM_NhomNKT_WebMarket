@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../includes/header.php';
+include '../../header.php';
 include '../includes/User_Database.php';
 include '../includes/Product_Database.php';
 
@@ -293,6 +293,7 @@ $user = $userDB->getUserInfo2($email);
         loadLocationData();
     });
     </script>
+    <?php include '../../footer.php' ?>
 </body>
 
 </html>
