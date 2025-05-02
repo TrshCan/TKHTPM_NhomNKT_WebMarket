@@ -28,10 +28,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (password_verify($password, $user['password'])) {
                 $_SESSION['email'] = $email;
                 $_SESSION['name'] = $user['name'];
+                $_SESSION['role'] = $user['role'];
                 if ($user['role'] == 'admin') {
+                    $_SESSION['admin_id']=$user['user_id'];
                     header("Location: dashboard.php");
+
                 } else {
                     header("Location: " . BASE_URL . "index.php");
+                    exit();
                 }
                 exit();
             } else {
@@ -48,6 +52,7 @@ $conn->close();
 
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -63,6 +68,7 @@ $conn->close();
             justify-content: center;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
+
         .login-container {
             background: white;
             border-radius: 1rem;
@@ -71,14 +77,17 @@ $conn->close();
             max-width: 400px;
             width: 100%;
         }
+
         .form-control {
             border-radius: 0.5rem;
             transition: all 0.3s ease;
         }
+
         .form-control:focus {
             border-color: #6366f1;
             box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.25);
         }
+
         .btn-primary {
             background-color: #6366f1;
             border: none;
@@ -86,9 +95,11 @@ $conn->close();
             padding: 0.75rem;
             transition: background-color 0.3s ease;
         }
+
         .btn-primary:hover {
             background-color: #4f46e5;
         }
+
         .error-message {
             background-color: #fee2e2;
             color: #dc2626;
@@ -96,12 +107,14 @@ $conn->close();
             border-radius: 0.5rem;
             margin-bottom: 1rem;
         }
+
         .form-label {
             font-weight: 500;
             color: #374151;
         }
     </style>
 </head>
+
 <body>
     <div class="login-container">
         <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Đăng Nhập</h1>
@@ -118,9 +131,13 @@ $conn->close();
                 <input type="password" class="form-control" id="password" name="password" required>
             </div>
             <button type="submit" class="btn btn-primary w-100 mb-3">Đăng Nhập</button>
+            <p class="text-center text-gray-600">
+                <a href="forgot_password.php" class="text-indigo-600 hover:underline">Quên mật khẩu?</a>
+            </p>
             <p class="text-center text-gray-600">Chưa có tài khoản? <a href="<?php echo BASE_URL; ?>public/pages/register.php" class="text-indigo-600 hover:underline">Đăng Ký</a></p>
         </form>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

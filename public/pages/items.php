@@ -1,342 +1,191 @@
-<?php include "../includes/header.php"; ?>
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+$page_title = 'Chi Tiết Sản Phẩm';
+include "../../header.php";
+?>
+
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="vi">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>Shop Item - NKT</title>
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
-    <link rel="stylesheet" href="../assets/css/items.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Chi tiết sản phẩm - NKT Shop">
+    <meta name="author" content="NKT Team">
+    <title><?php echo htmlspecialchars($page_title); ?> - NKT</title>
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-    /* Sản phẩm liên quan */
-    .related-products {
-        padding: 60px 0;
-        background-color: #ffffff;
-    }
-
-    .related-products h2 {
-        text-align: center;
-        font-size: 2.5rem;
-        font-weight: bold;
-        margin-bottom: 40px;
-    }
-
-    .related-products .product-list {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 20px;
-        padding: 0 15px;
-    }
-
-    .related-products .product {
-        background-color: #fff;
-        border: 1px solid #e0e0e0;
-        border-radius: 8px;
-        padding: 15px;
-        text-align: center;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        height: 100%;
-    }
-
-    .related-products .product:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    .related-products .product img {
-        width: 100%;
-        height: 180px;
-        object-fit: cover;
-        border-radius: 8px;
-        margin-bottom: 10px;
-    }
-
-    .related-products .product h3 {
-        font-size: 1.2rem;
-        margin: 10px 0;
-        color: #333;
-        font-weight: 500;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    .related-products .product .price {
-        font-size: 1.1rem;
-        color: #e74c3c;
-        font-weight: bold;
-        margin-bottom: 15px;
-    }
-
-    .related-products .product button {
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        padding: 10px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        width: 100%;
-        font-size: 1rem;
-    }
-
-    .related-products .product button:hover {
-        background-color: #0056b3;
-    }
-
-    .related-products .product button a {
-        color: #fff;
-        text-decoration: none;
-        display: block;
-    }
-
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-        .related-products .product-list {
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9fafb;
         }
-
-        .related-products .product img {
-            height: 150px;
+        .product-section {
+            padding: 4rem 0;
         }
-
-        .related-products .product h3 {
-            font-size: 1rem;
+        .product-section img {
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            object-fit: cover;
+            width: 100%;
+            max-height: 500px;
         }
-
-        .related-products .product .price {
-            font-size: 1rem;
+        .product-section h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 1rem;
         }
-    }
-
-    @media (max-width: 576px) {
-        .related-products .product-list {
-            grid-template-columns: 1fr;
+        .product-section .price {
+            font-size: 1.5rem;
+            color: #3b82f6;
+            font-weight: 600;
         }
-
-        .related-products .product img {
-            height: 200px;
+        .product-section .description {
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
         }
-    }
-
-    /* Ensure footer is not overlapped */
-    footer {
-        clear: both;
-        position: relative;
-        z-index: 1;
-    }
-
-    /* Existing styles for other sections */
-    body {
-        font-family: 'Roboto', sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f0f2f5;
-    }
-
-    /* Banner */
-    .banner {
-        height: 100vh;
-        background: url('public/assets/images/banner.jpg') no-repeat center center;
-        background-size: cover;
-        color: white;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-    }
-
-    .banner h1 {
-        font-size: 4rem;
-        font-weight: bold;
-        margin-bottom: 20px;
-    }
-
-    .banner p {
-        font-size: 1.5rem;
-        margin-bottom: 20px;
-    }
-
-    .banner button {
-        padding: 15px 40px;
-        background-color: #ff5722;
-        color: white;
-        font-size: 1.2rem;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-
-    .banner button:hover {
-        background-color: #e64a19;
-    }
-
-    /* Products Section */
-    .products-section {
-        padding: 60px 0;
-        background-color: #ffffff;
-    }
-
-    .products-section h2 {
-        text-align: center;
-        font-size: 2.5rem;
-        font-weight: bold;
-        margin-bottom: 50px;
-    }
-
-    /* Product Card */
-    .product-card {
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-        overflow: hidden;
-        transition: transform 0.3s ease;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .product-card:hover {
-        transform: translateY(-10px);
-    }
-
-    .product-card img {
-        height: 300px;
-        width: 100%;
-        object-fit: cover;
-        border-bottom: 2px solid #eee;
-    }
-
-    .product-card-body {
-        padding: 20px;
-        text-align: center;
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-
-    .product-card-body .product-name {
-        font-size: 1.5rem;
-        color: #333;
-        font-weight: 500;
-        text-decoration: none;
-        display: block;
-        margin-bottom: 10px;
-    }
-
-    .product-card-body .product-name:hover {
-        color: #007bff;
-    }
-
-    .product-card-body p {
-        font-size: 1.1rem;
-        color: #777;
-        margin-bottom: 15px;
-    }
-
-    .product-card-body .price {
-        font-size: 1.3rem;
-        color: #e74c3c;
-        font-weight: bold;
-    }
-
-    .product-card-footer {
-        padding: 20px;
-        background-color: #f8f9fa;
-        margin-top: auto;
-    }
-
-    .product-card-footer .btn {
-        width: 100%;
-        margin-bottom: 10px;
-        padding: 10px;
-        font-size: 1rem;
-        border-radius: 5px;
-        text-decoration: none;
-    }
-
-    .product-card-footer .btn-outline-dark {
-        color: #333;
-        border-color: #333;
-    }
-
-    .product-card-footer .btn-outline-dark:hover {
-        background-color: #333;
-        color: white;
-    }
-
-    /* Pagination */
-    .pagination .page-link {
-        color: #333;
-    }
-
-    .pagination .page-item.active .page-link {
-        background-color: #007bff;
-        border-color: #007bff;
-    }
-
-    /* Footer */
-    .footer {
-        background-color: #212529;
-        color: white;
-        text-align: center;
-        padding: 30px 0;
-    }
-
-    .footer a {
-        color: white;
-        text-decoration: none;
-        margin: 0 10px;
-    }
-
-    .footer a:hover {
-        text-decoration: underline;
-    }
+        .btn-add-to-cart, .btn-buy-now {
+            border-radius: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .btn-add-to-cart {
+            background-color: #3b82f6;
+            color: #ffffff;
+            border: none;
+        }
+        .btn-add-to-cart:hover {
+            background-color: #1e40af;
+        }
+        .btn-buy-now {
+            background-color: #f59e0b;
+            color: #ffffff;
+            border: none;
+            margin-left: 1rem;
+        }
+        .btn-buy-now:hover {
+            background-color: #d97706;
+        }
+        .form-control {
+            border-radius: 0.5rem;
+            border: 1px solid #d1d5db;
+            max-width: 4rem;
+            text-align: center;
+        }
+        .form-control:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
+        }
+        .related-products {
+            padding: 2rem 0;
+        }
+        .related-products h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .product-card {
+            background: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        .product-card img {
+            border-radius: 0.5rem;
+            max-height: 200px;
+            object-fit: cover;
+            width: 100%;
+        }
+        .product-card h3 {
+            font-size: 1.25rem;
+            color: #1f2937;
+            margin: 0.75rem 0;
+        }
+        .product-card .price {
+            font-size: 1.1rem;
+            color: #3b82f6;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        .product-card .btn-add-to-cart {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+        .alert-success {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1000;
+            border-radius: 0.5rem;
+        }
+        @media (max-width: 768px) {
+            .product-section {
+                padding: 2rem 0;
+            }
+            .product-section h1 {
+                font-size: 1.75rem;
+            }
+            .product-section img {
+                max-height: 300px;
+            }
+            .btn-add-to-cart, .btn-buy-now {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+            .related-products h2 {
+                font-size: 1.5rem;
+            }
+            .product-card {
+                margin-bottom: 1rem;
+            }
+        }
     </style>
 </head>
-
 <body>
-
     <?php
     require_once "../includes/Product_Database.php";
     $productsdb = new Product_Database();
-    if (isset($_GET['product_id'])) {
-        $product_id = $_GET['product_id'];
+    if (isset($_GET['product_id']) && is_numeric($_GET['product_id'])) {
+        $product_id = (int)$_GET['product_id'];
         $products = $productsdb->getProductById($product_id);
-        foreach ($products as $value) {
+        if (empty($products)) {
+            echo '<div class="container text-center py-5"><h3>Sản phẩm không tồn tại.</h3></div>';
+        } else {
+            foreach ($products as $value) {
     ?>
     <section class="product-section">
         <div class="container px-4 px-lg-5 my-5">
             <div class="row gx-4 gx-lg-5 align-items-center">
                 <div class="col-md-6">
-                    <img width="600" height="500" src="../assets/images/<?= $value["image"] ?>"
-                        alt="<?= $value["name"] ?>" />
+                    <img src="../assets/images/<?php echo htmlspecialchars($value['image']); ?>" 
+                         alt="<?php echo htmlspecialchars($value['name']); ?>" 
+                         class="img-fluid" />
                 </div>
                 <div class="col-md-6">
-                    <div class="small mb-1">Mã: <?= $value["product_id"] ?></div>
-                    <h1 class="display-5 fw-bolder"><?= $value["name"] ?></h1>
-                    <div class="fs-5 mb-3">
-                        <span><?= number_format($value["price"], 0, ',', '.') ?>đ</span>
-                    </div>
-                    <p class="lead"><?= $value["description"] ?></p>
-                    <div class="d-flex">
-                        <input class="form-control text-center me-3" id="inputQuantity" type="number" value="1"
-                            style="max-width: 3rem" />
-                        <button class="btn-add-to-cart flex-shrink-0">
-                            <a style="text-decoration: none;"
-                                href="../includes/cart_crud.php?action=add&id=<?php echo $value['product_id']; ?>&quantity=1">Thêm
-                                vào giỏ</a>
+                    <div class="small mb-1 text-muted">Mã: <?php echo htmlspecialchars($value['product_id']); ?></div>
+                    <h1><?php echo htmlspecialchars($value['name']); ?></h1>
+                    <div class="price mb-3"><?php echo number_format($value['price'], 0, ',', '.'); ?>đ</div>
+                    <p class="description"><?php echo htmlspecialchars($value['description']); ?></p>
+                    <div class="d-flex align-items-center">
+                        <input class="form-control me-3" id="inputQuantity" type="number" value="1" min="1" max="100" />
+                        <button class="btn-add-to-cart" 
+                                onclick="addToCart(<?php echo $value['product_id']; ?>, document.getElementById('inputQuantity').value)">
+                            Thêm vào giỏ
                         </button>
-                        <button class="btn-buy-now flex-shrink-0" type="button">
+                        <button class="btn-buy-now" onclick="buyNow(<?php echo $value['product_id']; ?>)">
                             Mua Ngay
                         </button>
                     </div>
@@ -345,37 +194,77 @@
         </div>
     </section>
     <?php
+            }
         }
+    } else {
+        echo '<div class="container text-center py-5"><h3>Vui lòng chọn một sản phẩm.</h3></div>';
     }
     ?>
 
+    <?php if (!empty($products)): ?>
     <section class="related-products">
-        <div class="container px-3 px-lg-5">
-            <h2 class="fw-bolder mb-4">Sản Phẩm Liên Quan</h2>
-            <div class="product-list">
+        <div class="container px-4 px-lg-5">
+            <h2>Sản Phẩm Liên Quan</h2>
+            <div class="row row-cols-1 row-cols-md-4 g-4">
                 <?php
                 $related_products = $productsdb->getRelatedProducts($product_id);
-                foreach ($related_products as $related) {
+                if (empty($related_products)) {
+                    echo '<p class="text-center text-muted">Không có sản phẩm liên quan.</p>';
+                } else {
+                    foreach ($related_products as $related) {
                 ?>
-                <div class="product">
-                    <img src="../assets/images/<?= $related["image"] ?>" alt="<?= $related["name"] ?>" />
-                    <h3><?= $related["name"] ?></h3>
-                    <p class="price"><?= number_format($related["price"], 0, ',', '.') ?>đ</p>
-                    <button class="add-to-cart">
-                        <a class="text-white"
-                            href="../includes/cart_crud.php?action=add&id=<?= $related["product_id"] ?>&quantity=1">Thêm
-                            Vào Giỏ</a>
-                    </button>
+                <div class="col">
+                    <div class="product-card">
+                        <img src="../assets/images/<?php echo htmlspecialchars($related['image']); ?>" 
+                             alt="<?php echo htmlspecialchars($related['name']); ?>" 
+                             loading="lazy" />
+                        <h3><?php echo htmlspecialchars($related['name']); ?></h3>
+                        <p class="price"><?php echo number_format($related['price'], 0, ',', '.'); ?>đ</p>
+                        <button class="btn-add-to-cart" 
+                                onclick="addToCart(<?php echo $related['product_id']; ?>, 1)">
+                            Thêm Vào Giỏ
+                        </button>
+                    </div>
                 </div>
                 <?php
+                    }
                 }
                 ?>
             </div>
         </div>
     </section>
+    <?php endif; ?>
 
-    <script src="js/scripts.js"></script>
-    <?php include "../../footer.php" ?>
+    <?php include "../../footer.php"; ?>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function addToCart(productId, quantity) {
+            if (quantity < 1 || quantity > 100) {
+                alert('Số lượng phải từ 1 đến 100.');
+                return;
+            }
+            window.location.href = `../includes/cart_crud.php?action=add&id=${productId}&quantity=${quantity}`;
+            // Show success message
+            const alert = document.createElement('div');
+            alert.className = 'alert alert-success alert-dismissible fade show';
+            alert.role = 'alert';
+            alert.innerHTML = `
+                Đã thêm sản phẩm vào giỏ hàng!
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `;
+            document.body.appendChild(alert);
+            setTimeout(() => alert.remove(), 3000);
+        }
+
+        function buyNow(productId) {
+            const quantity = document.getElementById('inputQuantity').value;
+            if (quantity < 1 || quantity > 100) {
+                alert('Số lượng phải từ 1 đến 100.');
+                return;
+            }
+            // Redirect to checkout page (implement as needed)
+            window.location.href = `../includes/cart_crud.php?action=add&id=${productId}&quantity=${quantity}&buy_now=1`;
+        }
+    </script>
 </body>
-
 </html>

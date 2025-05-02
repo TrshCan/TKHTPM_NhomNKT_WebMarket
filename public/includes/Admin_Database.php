@@ -73,7 +73,7 @@ class Admin_Database extends Database {
         $stmt = $conn->prepare("
             SELECT o.order_id, o.total_price, o.status, u.name as user_name
             FROM orders o
-            LEFT JOIN users u ON o.user_id = u.id
+            LEFT JOIN users u ON o.user_id = u.user_id
             ORDER BY o.order_date DESC
             LIMIT ?
         ");
