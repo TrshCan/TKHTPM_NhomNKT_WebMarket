@@ -117,9 +117,9 @@ foreach ($order_details as $detail) {
         </table>
         <div class="mt-3">
             <p><strong>Tạm Tính:</strong>
-                <?php echo number_format($order['total_price'] + ($order['discount'] ?? 0)) . 'đ'; ?></p>
+                <?php echo number_format($order['total'] + ($order['discount'] ?? 0)) . 'đ'; ?></p>
             <p><strong>Giảm Giá:</strong> <?php echo number_format($order['discount'] ?? 0) . 'đ'; ?></p>
-            <p><strong>Tổng Cộng:</strong> <?php echo number_format($order['total_price']) . 'đ'; ?></p>
+            <p><strong>Tổng Cộng:</strong> <?php echo number_format($order['total']) . 'đ'; ?></p>
             <p><strong>Phương Thức Thanh Toán:</strong>
                 <?php
                 echo $order['payment_method'] === 'cod' ? 'Thanh Toán Khi Nhận Hàng' : ($order['payment_method'] === 'bank' ? 'Thẻ Ngân Hàng' : 'Ví Điện Tử');

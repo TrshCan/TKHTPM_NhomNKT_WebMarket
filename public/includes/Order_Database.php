@@ -9,6 +9,7 @@ class Order_Database extends Database
     private $payment_method;
     private $address;
     private $status;
+    private $discount;
 
     // Getters
     public function getOrderId() {
@@ -35,13 +36,25 @@ class Order_Database extends Database
         return $this->status;
     }
 
+    public function getDiscount() {
+        return $this->discount;
+    }
+
     // CRUD Functions
 
     // Create: Insert a new order
-    public function createOrder($user_id, $total_price, $payment_method, $address, $status = 'đang chờ') {
-        $sql = self::$connection->prepare("INSERT INTO orders (user_id, total_price, payment_method, address, status) VALUES (?, ?, ?, ?, ?)");
-        $sql->bind_param("idsss", $user_id, $total_price, $payment_method, $address, $status);
-        return $sql->execute(); // Returns true on success, false on failure
+    public function createOrder($user_id, $total_price, $payment_method, $address, $discount = 0, $status = 'đang chờ') {
+        $sql = self::$connection->prepare("INSERT INTO orders (user_id, total, payment_method, address, discount, status) VALUES (?, ?, ?, ?, ?, ?)");
+        if (!$sql) {
+            error_log("Prepare failed: " . self::$connection->error);
+            return false;
+        }
+        $sql->bind_param("idssds", $user_id, $total_price, $payment_method, $address, $discount, $status);
+        if (!$sql->execute()) {
+            error_log("Execute failed: " . $sql->error);
+            return false;
+        }
+        return true;
     }
 
     // Read: Get all orders
@@ -62,9 +75,9 @@ class Order_Database extends Database
     }
 
     // Update: Update an existing order
-    public function updateOrder($order_id, $user_id, $total_price, $payment_method, $address, $status) {
-        $sql = self::$connection->prepare("UPDATE orders SET user_id = ?, total_price = ?, payment_method = ?, address = ?, status = ? WHERE order_id = ?");
-        $sql->bind_param("idsssi", $user_id, $total_price, $payment_method, $address, $status, $order_id);
+    public function updateOrder($order_id, $user_id, $total_price, $payment_method, $address, $discount, $status) {
+        $sql = self::$connection->prepare("UPDATE orders SET user_id = ?, total_price = ?, payment_method = ?, address = ?, discount = ?, status = ? WHERE order_id = ?");
+        $sql->bind_param("idssdsi", $user_id, $total_price, $payment_method, $address, $discount, $status, $order_id);
         return $sql->execute(); // Returns true on success, false on failure
     }
 

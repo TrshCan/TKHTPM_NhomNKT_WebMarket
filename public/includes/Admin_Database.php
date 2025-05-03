@@ -61,7 +61,7 @@ class Admin_Database extends Database {
     public function getTotalRevenue() {
         $conn = new mysqli("localhost", "root", "", "webbanhang");
         if ($conn->connect_error) return 0;
-        $result = $conn->query("SELECT SUM(total_price) as total FROM orders WHERE status = 'Hoàn thành'");
+        $result = $conn->query("SELECT SUM(total) as total FROM orders WHERE status = 'Hoàn thành'");
         $row = $result->fetch_assoc();
         $conn->close();
         return $row['total'] ?: 0;
@@ -71,7 +71,7 @@ class Admin_Database extends Database {
         $conn = new mysqli("localhost", "root", "", "webbanhang");
         if ($conn->connect_error) return [];
         $stmt = $conn->prepare("
-            SELECT o.order_id, o.total_price, o.status, u.name as user_name
+            SELECT o.order_id, o.total, o.status, u.name as user_name
             FROM orders o
             LEFT JOIN users u ON o.user_id = u.user_id
             ORDER BY o.order_date DESC
@@ -90,7 +90,7 @@ class Admin_Database extends Database {
         $conn = new mysqli("localhost", "root", "", "webbanhang");
         if ($conn->connect_error) return [];
         $result = $conn->query("
-            SELECT DATE_FORMAT(order_date, '%Y-%m') as month, SUM(total_price) as revenue
+            SELECT DATE_FORMAT(order_date, '%Y-%m') as month, SUM(total) as revenue
             FROM orders
             WHERE status = 'Hoàn thành'
             GROUP BY DATE_FORMAT(order_date, '%Y-%m')

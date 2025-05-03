@@ -78,16 +78,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $address = implode(', ', $address_parts);
 
     // Form data
-    $user_id = isset($_POST['id']) ? $_POST['id'] : null;
-    $payment_method = $_POST['payment'];
+    $user_id = isset($_POST['id']) ? (int)$_POST['id'] : null;
+    $payment_method = isset($_POST['payment']) ? trim($_POST['payment']) : '';
 
-    // Create order
-    $order_db->createOrder($user_id, $total, $payment_method, $address, $discount);
+    // Validate required fields
+    if (empty($user_id) || empty($payment_method) || empty($address)) {
+        error_log("Missing required fields: user_id=$user_id, payment_method=$payment_method, address=$address");
+        die("Vui lòng điền đầy đủ thông tin thanh toán.");
+    }
+
+    // Create order with default status 'đang chờ'
+    $result = $order_db->createOrder($user_id, $total, $payment_method, $address);
+    if ($result === false) {
+        error_log("Failed to create order for user_id: $user_id, error: " . Order_Database::$connection->error);
+        die("Có lỗi xảy ra khi tạo đơn hàng. Vui lòng thử lại.");
+    }
+
     $order_id = Order_Database::$connection->insert_id;
+    if ($order_id == 0) {
+        error_log("No order ID generated for user_id: $user_id");
+        die("Không thể tạo đơn hàng. Vui lòng thử lại.");
+    }
 
     // Create order details
     foreach ($_SESSION['cart'] as $product_id => $item) {
-        $order_detail_db->createOrderDetail($order_id, $product_id, $item['quantity'], $item['price']);
+        $result = $order_detail_db->createOrderDetail($order_id, $product_id, $item['quantity'], $item['price']);
+        if ($result === false) {
+            error_log("Failed to create order detail for order_id: $order_id, product_id: $product_id");
+        }
     }
 
     // Set session variables for success modal
@@ -101,3 +119,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     header("Location: ../pages/checkout.php");
     exit;
 }
+?>

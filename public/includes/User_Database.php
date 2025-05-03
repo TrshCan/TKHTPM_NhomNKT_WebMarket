@@ -18,7 +18,7 @@ class User_Database
             return null;
         }
 
-        $stmt = $this->connection->prepare("SELECT name, email,password, phone, address FROM users WHERE email = ?");
+        $stmt = $this->connection->prepare("SELECT user_id, name, email,password, phone, address FROM users WHERE email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $result = $stmt->get_result();

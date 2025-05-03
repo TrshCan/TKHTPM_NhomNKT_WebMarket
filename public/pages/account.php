@@ -57,11 +57,11 @@ if ($conn->connect_error) {
     $error = "Không thể kết nối đến cơ sở dữ liệu.";
 } else {
     // Use 'total_price' as per the orders table structure
-    $stmt = $conn->prepare("SELECT order_id, total_price, order_date, status FROM orders WHERE user_id = ? ORDER BY order_date DESC");
+    $stmt = $conn->prepare("SELECT order_id, total, order_date, status FROM orders WHERE user_id = ? ORDER BY order_date DESC");
     if (!$stmt) {
         $error = "Lỗi truy vấn cơ sở dữ liệu: " . $conn->error;
     } else {
-        $stmt->bind_param("i", $user['id']);
+        $stmt->bind_param("i", $user['user_id']);
         $stmt->execute();
         $result = $stmt->get_result();
         $orders = $result->fetch_all(MYSQLI_ASSOC);
@@ -253,7 +253,7 @@ if ($conn->connect_error) {
                                                     <tr>
                                                         <td>#<?php echo htmlspecialchars($order['order_id']); ?></td>
                                                         <td><?php echo htmlspecialchars(date('d/m/Y', strtotime($order['order_date']))); ?></td>
-                                                        <td><?php echo number_format($order['total_price'], 0, ',', '.'); ?>đ</td>
+                                                        <td><?php echo number_format($order['total'], 0, ',', '.'); ?>đ</td>
                                                         <td><?php echo htmlspecialchars($order['status']); ?></td>
                                                     </tr>
                                                 <?php endforeach; ?>

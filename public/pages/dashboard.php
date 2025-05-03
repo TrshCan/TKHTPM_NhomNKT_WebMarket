@@ -22,9 +22,6 @@ $total_revenue = $adminDB->getTotalRevenue();
 // Fetch recent orders
 $recent_orders = $adminDB->getRecentOrders(5);
 
-// Fetch monthly revenue for chart
-$monthly_revenue = $adminDB->getMonthlyRevenue();
-
 // Fetch product category distribution
 $category_distribution = $adminDB->getCategoryDistribution();
 ?>
@@ -43,25 +40,6 @@ $category_distribution = $adminDB->getCategoryDistribution();
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f9fafb;
             margin: 0;
-        }
-        .sidebar {
-            min-height: 100vh;
-            background-color: #1f2937;
-            padding-top: 1rem;
-        }
-        .sidebar .nav-link {
-            color: #d1d5db;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            margin: 0.25rem 1rem;
-            transition: all 0.3s ease;
-        }
-        .sidebar .nav-link:hover, .sidebar .nav-link.active {
-            color: #ffffff;
-            background-color: #3b82f6;
-        }
-        .sidebar .nav-link i {
-            margin-right: 0.5rem;
         }
         .main-content {
             padding: 2rem;
@@ -121,16 +99,6 @@ $category_distribution = $adminDB->getCategoryDistribution();
             border-radius: 0.5rem;
         }
         @media (max-width: 768px) {
-            .sidebar {
-                position: fixed;
-                z-index: 1000;
-                width: 250px;
-                transform: translateX(-100%);
-                transition: transform 0.3s ease;
-            }
-            .sidebar.show {
-                transform: translateX(0);
-            }
             .main-content {
                 padding: 1rem;
             }
@@ -150,19 +118,7 @@ $category_distribution = $adminDB->getCategoryDistribution();
 <body>
     <div class="d-flex">
         <!-- Sidebar -->
-        <div class="sidebar d-md-block" id="sidebar">
-            <div class="position-sticky pt-3">
-                <h4 class="text-white text-center mb-4">Admin Dashboard</h4>
-                <ul class="nav flex-column">
-                    <li class="nav-item"><a class="nav-link active" href="dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link" href="admin.php"><i class="fas fa-users"></i> Quản Lý Người Dùng</a></li>
-                    <li class="nav-item"><a class="nav-link" href="quanlysanpham.php"><i class="fas fa-box"></i> Sản Phẩm</a></li>
-                    <li class="nav-item"><a class="nav-link" href="order.php"><i class="fas fa-shopping-cart"></i> Đơn Hàng</a></li>
-                    <li class="nav-item"><a class="nav-link" href="report.php"><i class="fas fa-chart-bar"></i> Báo Cáo</a></li>
-                    <li class="nav-item"><a class="nav-link" href="settings.php"><i class="fas fa-cog"></i> Cài Đặt</a></li>
-                </ul>
-            </div>
-        </div>
+        <?php include 'sidebar.php'; ?>
 
         <!-- Main Content -->
         <main class="main-content flex-grow-1">
@@ -171,14 +127,6 @@ $category_distribution = $adminDB->getCategoryDistribution();
             </button>
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1>Dashboard</h1>
-                <div class="btn-toolbar mb-2 mb-md-0">
-                    <div class="btn-group me-2">
-                        <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
-                    </div>
-                    <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-                        <i class="fas fa-calendar"></i> Tuần Này
-                    </button>
-                </div>
             </div>
 
             <!-- Summary Cards -->
@@ -225,19 +173,9 @@ $category_distribution = $adminDB->getCategoryDistribution();
                 </div>
             </div>
 
-            <!-- Charts and Tables -->
+            <!-- Product Chart -->
             <div class="row">
-                <div class="col-md-8">
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <i class="fas fa-chart-line me-1"></i> Doanh Thu Theo Tháng
-                        </div>
-                        <div class="card-body">
-                            <canvas id="revenueChart" height="300"></canvas>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="card mb-4">
                         <div class="card-header">
                             <i class="fas fa-chart-pie me-1"></i> Phân Loại Sản Phẩm
@@ -249,7 +187,8 @@ $category_distribution = $adminDB->getCategoryDistribution();
                 </div>
             </div>
 
-            <div class="card mb-4">
+            <!-- Recent Orders Table -->
+            <div class="  <div class="card mb-4">
                 <div class="card-header">
                     <i class="fas fa-table me-1"></i> Đơn Hàng Gần Đây
                 </div>
@@ -271,7 +210,7 @@ $category_distribution = $adminDB->getCategoryDistribution();
                                         <tr>
                                             <td>#<?php echo htmlspecialchars($order['order_id']); ?></td>
                                             <td><?php echo htmlspecialchars($order['user_name'] ?: 'N/A'); ?></td>
-                                            <td><?php echo number_format($order['total_price'], 0, ',', '.'); ?>đ</td>
+                                            <td><?php echo number_format($order['total'], 0, ',', '.'); ?>đ</td>
                                             <td>
                                                 <span class="badge <?php
                                                     switch ($order['status']) {
@@ -309,34 +248,6 @@ $category_distribution = $adminDB->getCategoryDistribution();
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            // Revenue chart
-            const revenueCtx = document.getElementById('revenueChart').getContext('2d');
-            const revenueChart = new Chart(revenueCtx, {
-                type: 'line',
-                data: {
-                    labels: <?php echo json_encode(array_column($monthly_revenue, 'month')); ?>,
-                    datasets: [{
-                        label: 'Doanh Thu',
-                        data: <?php echo json_encode(array_column($monthly_revenue, 'revenue')); ?>,
-                        backgroundColor: 'rgba(59, 130, 246, 0.2)',
-                        borderColor: '#3b82f6',
-                        borderWidth: 2,
-                        tension: 0.4,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'top' }
-                    },
-                    scales: {
-                        y: { beginAtZero: true }
-                    }
-                }
-            });
-
             // Product chart
             const productCtx = document.getElementById('productChart').getContext('2d');
             const productChart = new Chart(productCtx, {
