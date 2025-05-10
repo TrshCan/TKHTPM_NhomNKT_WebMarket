@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Tài Khoản</title>
+    <link rel="stylesheet" href="public/css/style.css">
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <h2>Admin Panel</h2>
+        <ul>
+            <li><a href="admin.html" >Dashboard</a></li>
+            <li><a href="quanlysp.html">Quản lý sản phẩm</a></li>
+            <li><a href="quanlydonhang.html">Quản lý đơn hàng</a></li>
+            <li><a href="user.html" class="active">Quản lý người dùng</a></li>
+            <li><a href="../index.html">Thoát</a></li>
+        </ul>
+    </aside>
+    <!-- Main Content -->
+    <div class="admin-content">
+        <h1>Quản Lý Tài Khoản</h1>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tên Người Dùng</th>
+                    <th>Email</th>
+                    <th>Quyền</th>
+                    <th>Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>#U001</td>
+                    <td>Nguyễn Văn A</td>
+                    <td>nguyenvana@example.com</td>
+                    <td>Admin</td>
+                    <td class="action-buttons">
+                        <button class="edit">Cập Nhật</button>
+                        <button class="delete">Xóa</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>#U002</td>
+                    <td>Trần Thị B</td>
+                    <td>tranthib@example.com</td>
+                    <td>Người Dùng</td>
+                    <td class="action-buttons">
+                        <button class="edit">Cập Nhật</button>
+                        <button class="delete">Xóa</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>#U003</td>
+                    <td>Phạm Văn C</td>
+                    <td>phamvanc@example.com</td>
+                    <td>Người Dùng</td>
+                    <td class="action-buttons">
+                        <button class="edit">Cập Nhật</button>
+                        <button class="delete">Xóa</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>
